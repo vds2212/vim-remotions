@@ -20,4 +20,9 @@ If in the direction of the initial move as been selected then:
 
 ## Configuration
 
+## Similar Projects
+
+- [repmo.vim](https://www.vim.org/scripts/script.php?script_id=2174)
+- [repeatable-motions.vim](https://www.vim.org/scripts/script.php?script_id=4914)
+- [repeat-motion](https://www.vim.org/scripts/script.php?script_id=3665)
 
