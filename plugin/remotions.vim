@@ -1,58 +1,93 @@
 " Setting sections:
-if !exists("g:remotions_direction")
-  " If set to one the forward and the backward (';', ',') repetitions are made in the
-  " direction of the document
-  " Otherwise the forward and the backward (';', ',') repetitions are made in
-  " the direction of the original move (the standard behavior of ';', ',')
-  let g:remotions_direction = 1
-endif
 
-if !exists("g:remotions_moves")
-  let g:remotions_moves = {
+        " \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
+        " \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
+        " \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
+        " \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
+        " \ 'line' : { 'backward' : 'k', 'forward' : 'j' },
+        " \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
+        " \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
+        " \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>' },
+        " \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
+        " \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
+
+if !exists("g:remotions_motions")
+  let g:remotions_motions = {
         \ 'para' : { 'backward' : '{', 'forward' : '}' },
         \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
+        \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
         \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
-        \ 'Method' : { 'backward' : '[M', 'forward' : ']M' },
-        \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q' },
+        \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
+        \
+        \ 'arg' : { 'backward' : '[a', 'forward' : ']a', 'doc': 'unimpaired' },
+        \ 'buffer' : { 'backward' : '[b', 'forward' : ']b', 'doc': 'unimpaired' },
+        \ 'location' : { 'backward' : '[l', 'forward' : ']l', 'doc': 'unimpaired' },
+        \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q', 'doc': 'unimpaired' },
+        \ 'tag' : { 'backward' : '[t', 'forward' : ']t', 'doc': 'unimpaired' },
+        \
+        \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g', 'doc': 'coc-diagnostic' },
         \ }
 endif
 
-" The document forward sequence associated to the last move or '' if the last
-" move is among 'f', 'F', 't' or 'T'
-let g:remotions_forward_plug = ''
+if !exists("g:remotions_direction")
+  " If set to one:
+  "   The forward and the backward (';', ',') repetitions are made in the
+  "   direction of the document
+  " Otherwise:
+  "   The forward and the backward (';', ',') repetitions are made in the
+  "   direction of the original motion (the standard behavior of ';', ',')
+  let g:remotions_direction = 1
+endif
+
+if !exists("g:remotions_count")
+  " If set to one the count of the original motion will also be repeated
+  let g:remotions_count = 0
+endif
 
 " The document backward sequence associated to the last move or '' if the last
 " move is among 'f', 'F', 't' or 'T'
 let g:remotions_backward_plug = ''
 
+" The document forward sequence associated to the last move or '' if the last
+" move is among 'f', 'F', 't' or 'T'
+let g:remotions_forward_plug = ''
+
 " Set to 1 if the document forward move is not the forward move
 let g:remotions_inverted = 0
 
+" Keep the count of the original movement
+let g:remotions_n = 0
 
-function! s:RepeatMove(forward)
+
+function! s:RepeatMotion(forward)
+  " Method called when the motion repetition are used:
+  " - ';' calls RepeatMotion(1)
+  " - ',' calls RepeatMotion(0)
+
   let ret = ""
-  if xor(a:forward, g:remotions_inverted)
+  echom "a:forward" a:forward
+  if xor(g:remotions_inverted, a:forward)
     if g:remotions_forward_plug != ''
       let ret = g:remotions_forward_plug 
     else
-      " let ret = "<cmd>normal! ;\<CR>"
       let ret = ":silent normal! ;\<CR>"
     endif
   else
     if g:remotions_backward_plug != ''
       let ret = g:remotions_backward_plug
     else
-      " let ret = "<cmd>normal! ,\<CR>"
       let ret = ":silent normal! ,\<CR>"
     endif
   endif
   return ret
 endfunction
 
-nnoremap <silent> <expr> ; <SID>RepeatMove(1)
-nnoremap <silent> <expr> , <SID>RepeatMove(0)
+nnoremap <silent> <expr> ; <SID>RepeatMotion(1)
+nnoremap <silent> <expr> , <SID>RepeatMotion(0)
 
-function! s:StandardMove(key)
+function! s:EeFfMotion(key)
+  " Method called when the single char motion are used:
+  " - 'f' calls EeFfMotion('f')
   let g:remotions_backward_plug = '' 
   let g:remotions_forward_plug = ''
 
@@ -65,14 +100,19 @@ function! s:StandardMove(key)
   return a:key
 endfunction
 
-nnoremap <expr> f <SID>StandardMove('f')
-nnoremap <expr> F <SID>StandardMove('F')
-nnoremap <expr> t <SID>StandardMove('t')
-nnoremap <expr> T <SID>StandardMove('T')
+nnoremap <expr> f <SID>EeFfMotion('f')
+nnoremap <expr> F <SID>EeFfMotion('F')
+nnoremap <expr> t <SID>EeFfMotion('t')
+nnoremap <expr> T <SID>EeFfMotion('T')
 
-function! CustomMove(forward, backward_plug, forward_plug)
-  let g:remotions_forward_plug = a:forward_plug
-  let g:remotions_backward_plug = a:backward_plug
+function! CustomMotion(forward, backward_plug, forward_plug)
+  if a:forward
+    let g:remotions_backward_plug = a:backward_plug
+    let g:remotions_forward_plug = a:forward_plug
+  else
+    let g:remotions_backward_plug = a:forward_plug
+    let g:remotions_forward_plug = a:backward_plug
+  endif
 
   let g:remotions_inverted = 0
   if !a:forward && g:remotions_direction
@@ -85,7 +125,10 @@ function! CustomMove(forward, backward_plug, forward_plug)
     return a:backward_plug
 endfunction
 
-function! s:HijackMove(move, key)
+function! s:HijackMotion(move, key)
+  " Replace the motion mapping from move to a plugged version
+  " Return the plug used to replace it
+
   let move_mapping = maparg(a:move, 'n', 0, 1)
   let move_key = '<Plug>(' .. a:key .. ')'
   let move_plug = "\<Plug>(" .. a:key .. ')'
@@ -119,26 +162,31 @@ function! s:HijackMove(move, key)
   return move_plug
 endfunction
 
-function! s:HijackMoves(backward, forward, key)
-  let backward_plug = s:HijackMove(a:backward, "backward" .. a:key)
-  let forward_plug = s:HijackMove(a:forward, "forward" .. a:key)
+function! s:HijackMotions(backward, forward, key)
+  " Introduce a plugged version of the backward and forward mapping
+  " Replace the backward and forward mapping by
+  " a backward and forward mapping that use the CustomMotion method
+  " that use the plugged version of the mapping to make the original move
+
+  let backward_plug = s:HijackMotion(a:backward, "backward" .. a:key)
+  let forward_plug = s:HijackMotion(a:forward, "forward" .. a:key)
 
   let mapping = {}
   let mapping.lhs = a:backward
   let mapping.mode = 'n'
   let mapping.buffer = 1
   call add(b:added_mappings, mapping)
-  execute 'nmap <buffer> <silent> <expr> ' .. a:backward .. " CustomMove(0, '" .. backward_plug .. "', '" .. forward_plug .. "')"
+  execute 'nmap <buffer> <silent> <expr> ' .. a:backward .. " CustomMotion(0, '" .. backward_plug .. "', '" .. forward_plug .. "')"
 
   let mapping = {}
   let mapping.lhs = a:forward
   let mapping.mode = 'n'
   let mapping.buffer = 1
   call add(b:added_mappings, mapping)
-  execute 'nmap <buffer> <silent> <expr> ' .. a:forward .. " CustomMove(1, '" .. backward_plug  .. "', '" .. forward_plug .. "')"
+  execute 'nmap <buffer> <silent> <expr> ' .. a:forward .. " CustomMotion(1, '" .. backward_plug  .. "', '" .. forward_plug .. "')"
 endfunction
 
-function! ResetMappings()
+function! s:ResetMappings()
   " Delete the mapping that have been added:
   if exists("b:added_mappings")
     for mapping in b:added_mappings
@@ -161,7 +209,7 @@ function! ResetMappings()
   let b:deleted_mappings = []
 endfunction
 
-function! SetMappings()
+function! s:SetMappings()
   if exists("b:added_mappings") || exists("b:deleted_mappings")
     call ResetMappings()
   else
@@ -172,13 +220,11 @@ function! SetMappings()
     let b:deleted_mappings = []
   endif
 
-  for name in keys(g:remotions_moves)
-    call s:HijackMoves(g:remotions_moves[name].backward, g:remotions_moves[name].forward, name)
+  for name in keys(g:remotions_motions)
+    call s:HijackMotions(g:remotions_motions[name].backward, g:remotions_motions[name].forward, name)
   endfor
-  " call s:HijackMoves('[[', ']]', 'class')
-  " call s:HijackMoves('{', '}', 'para')
 endfunction
 
-autocmd BufRead,BufNew * call SetMappings()
-autocmd FileType * call SetMappings()
+autocmd BufRead,BufNew * call <SID>SetMappings()
+autocmd FileType * call <SID>SetMappings()
 
