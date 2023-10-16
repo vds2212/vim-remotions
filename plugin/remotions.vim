@@ -39,9 +39,9 @@ if !exists("g:remotions_direction")
   let g:remotions_direction = 1
 endif
 
-if !exists("g:remotions_count")
+if !exists("g:remotions_repeatcount")
   " If set to one the count of the original motion will also be repeated
-  let g:remotions_count = 0
+  let g:remotions_repeatcount = 0
 endif
 
 " The document backward sequence associated to the last move or '' if the last
@@ -56,7 +56,7 @@ let g:remotions_forward_plug = ''
 let g:remotions_inverted = 0
 
 " Keep the count of the original movement
-let g:remotions_n = 0
+let g:remotions_count = 0
 
 
 function! s:RepeatMotion(forward)
@@ -88,8 +88,12 @@ nnoremap <silent> <expr> , <SID>RepeatMotion(0)
 function! s:EeFfMotion(key)
   " Method called when the single char motion are used:
   " - 'f' calls EeFfMotion('f')
+  " The method set the variable to be able to replay the motion
+
   let g:remotions_backward_plug = '' 
   let g:remotions_forward_plug = ''
+
+  let g:remotions_count = v:count
 
   let forward = a:key ==# 'f' || a:key ==# 't'
   let g:remotions_inverted = 0
@@ -105,7 +109,11 @@ nnoremap <expr> F <SID>EeFfMotion('F')
 nnoremap <expr> t <SID>EeFfMotion('t')
 nnoremap <expr> T <SID>EeFfMotion('T')
 
-function! CustomMotion(forward, backward_plug, forward_plug)
+function! s:CustomMotion(forward, backward_plug, forward_plug)
+  " Method called when the original motion are used.
+  " - ']m' calls CustomMotion(1, "\<Plug>forwardmethod", "\<Plug>backwardmethod")
+  " The method set the variable to be able to replay the motion
+
   if a:forward
     let g:remotions_backward_plug = a:backward_plug
     let g:remotions_forward_plug = a:forward_plug
@@ -113,6 +121,8 @@ function! CustomMotion(forward, backward_plug, forward_plug)
     let g:remotions_backward_plug = a:forward_plug
     let g:remotions_forward_plug = a:backward_plug
   endif
+
+  let g:remotions_count = v:count
 
   let g:remotions_inverted = 0
   if !a:forward && g:remotions_direction
@@ -176,14 +186,14 @@ function! s:HijackMotions(backward, forward, key)
   let mapping.mode = 'n'
   let mapping.buffer = 1
   call add(b:added_mappings, mapping)
-  execute 'nmap <buffer> <silent> <expr> ' .. a:backward .. " CustomMotion(0, '" .. backward_plug .. "', '" .. forward_plug .. "')"
+  execute 'nmap <buffer> <silent> <expr> ' .. a:backward .. " <SID>CustomMotion(0, '" .. backward_plug .. "', '" .. forward_plug .. "')"
 
   let mapping = {}
   let mapping.lhs = a:forward
   let mapping.mode = 'n'
   let mapping.buffer = 1
   call add(b:added_mappings, mapping)
-  execute 'nmap <buffer> <silent> <expr> ' .. a:forward .. " CustomMotion(1, '" .. backward_plug  .. "', '" .. forward_plug .. "')"
+  execute 'nmap <buffer> <silent> <expr> ' .. a:forward .. " <SID>CustomMotion(1, '" .. backward_plug  .. "', '" .. forward_plug .. "')"
 endfunction
 
 function! s:ResetMappings()
@@ -211,7 +221,7 @@ endfunction
 
 function! s:SetMappings()
   if exists("b:added_mappings") || exists("b:deleted_mappings")
-    call ResetMappings()
+    call s:ResetMappings()
   else
     " List of the buffer mappings that have been added:
     let b:added_mappings =  []
