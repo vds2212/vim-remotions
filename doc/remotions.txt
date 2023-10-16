@@ -1,0 +1,58 @@
+*remotions.txt*  Repeat motion behind f & t
+
+Author:  Vivian De Smedt
+License: Same terms as Vim itself (see |license|)
+
+
+==============================================================================
+Remotions                                                          |remotions|
+Introduction ........................................ |remotions-introduction|
+Usage ...................................................... |remotions-usage|
+Configuration ...................................... |remotions-configuration|
+About ...................................................... |remotions-about|
+
+
+==============================================================================
+INTRODUCTION                                *remotions* *remotions-introduction*
+
+The goal of this plugin is allow to repeat moves with the |,| and |;| keys
+
+It is particularly useful for double key moves likes next method: |[m|, |]m|.
+
+The repetition keys can be configured as:
+- In the direction of the initial move
+- In the direction of the document
+
+e.g. for |[m| move:
+
+If in the direction of the initial move as been selected then:
+- |;| will do |[m| and |,| will do |]m|
+
+If in the direction of the initial move as been selected then:
+- |;| will do |]m| and |,| will do |[m|
+
+
+==============================================================================
+USAGE                                                        *remotions-usage*
+
+
+==============================================================================
+CONFIGURATION                                        *remotions-configuration*
+
+------------------------------------------------------------------------------
+How to change the move direction                       *g:remotions_direction*
+
+By default move are repeated in the direction of the document. If you want to
+change that you can set the `g:remotions_direction` to 0
+>
+    let g:remotions_direction=0
+<
+
+==============================================================================
+ABOUT                                                        *remotions-about*
+
+Grab the latest version or report a bug on GitHub:
+
+http://github.com/vds2212/vim-remotions
+
+ vim:tw=78:et:ft=help:norl:
