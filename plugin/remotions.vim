@@ -1,12 +1,10 @@
 " Setting sections:
 
-        " \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
+        " \ 'line' : { 'backward' : 'k', 'forward' : 'j' },
         " \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
         " \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
         " \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
-        " \ 'line' : { 'backward' : 'k', 'forward' : 'j' },
         " \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
-        " \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
         " \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>' },
         " \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
         " \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
@@ -14,6 +12,8 @@
 if !exists("g:remotions_motions")
   let g:remotions_motions = {
         \ 'para' : { 'backward' : '{', 'forward' : '}' },
+        \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
+        \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
         \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
         \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
         \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
@@ -44,18 +44,18 @@ if !exists("g:remotions_repeatcount")
   let g:remotions_repeatcount = 0
 endif
 
-" The document backward sequence associated to the last move or '' if the last
-" move is among 'f', 'F', 't' or 'T'
+" The document backward sequence associated to the last motion or '' if the last
+" motion is among 'f', 'F', 't' or 'T'
 let g:remotions_backward_plug = ''
 
-" The document forward sequence associated to the last move or '' if the last
-" move is among 'f', 'F', 't' or 'T'
+" The document forward sequence associated to the last motion or '' if the last
+" motion is among 'f', 'F', 't' or 'T'
 let g:remotions_forward_plug = ''
 
-" Set to 1 if the document forward move is not the forward move
+" Set to 1 if the document forward motion is not the forward motion
 let g:remotions_inverted = 0
 
-" Keep the count of the original movement
+" Keep the count of the original motion
 let g:remotions_count = 0
 
 
@@ -65,7 +65,7 @@ function! s:RepeatMotion(forward)
   " - ',' calls RepeatMotion(0)
 
   let ret = ""
-  echom "a:forward" a:forward
+  " echom "a:forward" a:forward
   if xor(g:remotions_inverted, a:forward)
     if g:remotions_forward_plug != ''
       let ret = g:remotions_forward_plug 
@@ -135,48 +135,57 @@ function! s:CustomMotion(forward, backward_plug, forward_plug)
     return a:backward_plug
 endfunction
 
-function! s:HijackMotion(move, key)
-  " Replace the motion mapping from move to a plugged version
+function! s:HijackMotion(motion, key)
+  " Replace the motion mapping from motion to a plugged version
   " Return the plug used to replace it
 
-  let move_mapping = maparg(a:move, 'n', 0, 1)
-  let move_key = '<Plug>(' .. a:key .. ')'
-  let move_plug = "\<Plug>(" .. a:key .. ')'
+  let motion_mapping = maparg(a:motion, 'n', 0, 1)
+  let motion_key = '<Plug>(' .. a:key .. ')'
+  let motion_plug = "\<Plug>(" .. a:key .. ')'
 
-  if len(move_mapping) == 0
+  if len(motion_mapping) == 0
+    " There is no mapping for that motion
+    " The plug is mapped to the motion itself
+
     let mapping = {}
-    let mapping.lhs = move_key
+    let mapping.lhs = motion_key
     let mapping.mode = 'n'
     let mapping.buffer = 1
     call add(b:added_mappings, mapping)
-    let cmd = 'nnoremap <buffer> <silent> ' .. move_key .. ' ' .. a:move
+    let cmd = 'nnoremap <buffer> <silent> ' .. motion_key .. ' ' .. a:motion
     execute cmd
   else
-    call add(b:deleted_mappings, move_mapping)
+    " There is a mapping for the motion
+
+    " The original mapping is deleted
+    call add(b:deleted_mappings, motion_mapping)
     let cmd = 'nunmap '
-    if move_mapping.buffer
+    if motion_mapping.buffer
       let cmd = cmd .. '<buffer> '
     endif
-    execute cmd .. a:move
+    execute cmd .. a:motion
 
-    " Copy the mapping before deleting it:
-    let move_mapping = copy(move_mapping)
+    " The plug is mapped to the original mapping rhs
 
-    let move_mapping.lhs = move_key
-    let move_mapping.lhsraw = move_plug
-    let move_mapping.buffer = 1
-    call add(b:added_mappings, move_mapping)
-    call mapset(move_mapping)
+    " Remark: Copy the mapping to avoid modifying the backup used for the
+    " reset of the mapping
+    let motion_mapping = copy(motion_mapping)
+
+    let motion_mapping.lhs = motion_key
+    let motion_mapping.lhsraw = motion_plug
+    let motion_mapping.buffer = 1
+    call add(b:added_mappings, motion_mapping)
+    call mapset(motion_mapping)
   endif
 
-  return move_plug
+  return motion_plug
 endfunction
 
 function! s:HijackMotions(backward, forward, key)
   " Introduce a plugged version of the backward and forward mapping
   " Replace the backward and forward mapping by
   " a backward and forward mapping that use the CustomMotion method
-  " that use the plugged version of the mapping to make the original move
+  " that use the plugged version of the mapping to make the original motion
 
   let backward_plug = s:HijackMotion(a:backward, "backward" .. a:key)
   let forward_plug = s:HijackMotion(a:forward, "forward" .. a:key)
