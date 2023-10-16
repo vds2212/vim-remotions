@@ -1,5 +1,7 @@
 " Setting sections:
 
+let g:remotions_version = "0.1"
+
         " \ 'line' : { 'backward' : 'k', 'forward' : 'j' },
         " \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
         " \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
