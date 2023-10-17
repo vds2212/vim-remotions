@@ -2,21 +2,26 @@
 
 ## Introduction
 
-The goal of this plugin is allow to repeat motions with the `,` and `;` keys
+The `;` and `,` keys are repeating the `f`, `F`, `t` and `T` motions.
+But for the other motion there are no builtin ways to repeat them. 
 
-It is particularly useful for double key motions likes next/previous method: `[m`/`]m`.
+The goal of this plugin is allow to repeat the other motions with the `;` and `,` keys
 
-The repetition keys can be configured as to be done in the direction of:
-- the initial motion
+It is particularly useful for double characters motions likes next/previous method: `[m`/`]m`.
+
+The repetition of the motions can be configured as to be done in the direction of:
+- the initial motion or of
 - the document
 
-e.g. for `[m` motion:
+e.g. When the `[m` motion will be repeated:
 
-If in the direction of the initial motion as been selected then:
-- `;` will do `[m` and `,` will do `]m`
+- The forward repetition `;` will do `]m` and
+- The backward repetition `,` will do `[m`
+If in the direction of the document as been selected then:
 
+- The forward repetition `;` will do `[m` and
+- The backward repetition `,` will do `]m`
 If in the direction of the initial motion as been selected then:
-- `;` will do `]m` and `,` will do `[m`
 
 
 # Requirements
@@ -32,6 +37,75 @@ Plug 'vds2212/vim-remotions
 ```
 
 ## Configuration
+
+### Direction
+
+The direction of the repeated motion can be configured using the `g:remotions_direction`
+```
+" Set the direction of the repetition to the initial move:
+let g:remotions_direction = 0
+```
+
+```
+" Set the direction of the repetition to the document (the default):
+let g:remotions_direction = 1
+```
+
+### Motions
+
+It is possible to configure the motion that should be considered:
+
+```
+" For each motion pairs three information has to be provided:
+" - Name of the pair
+" - The backward action
+" - The forward action
+let g:remotions_motions = {
+    \ 'para' : { 'backward' : '{', 'forward' : '}' },
+    \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
+    \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
+    \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
+    \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
+    \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
+    \
+    \ 'buffer' : { 'backward' : '[b', 'forward' : ']b'},
+    \ 'location' : { 'backward' : '[l', 'forward' : ']l'},
+    \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q'},
+    \ 'tag' : { 'backward' : '[t', 'forward' : ']t'},
+    \
+    \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g'},
+    \ }
+```
+
+Here is an more extensive list of motions:
+```
+let g:remotions_motions = {
+    \ 'para' : { 'backward' : '{', 'forward' : '}' },
+    \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
+    \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
+    \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
+    \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
+    \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
+    \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
+    \
+    \ 'line' : { 'backward' : 'k', 'forward' : 'j' },
+    \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
+    \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
+    \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
+    \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
+    \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>' },
+    \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
+    \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
+    \
+    \ 'arg' : { 'backward' : '[a', 'forward' : ']a'},
+    \ 'buffer' : { 'backward' : '[b', 'forward' : ']b'},
+    \ 'location' : { 'backward' : '[l', 'forward' : ']l'},
+    \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q'},
+    \ 'tag' : { 'backward' : '[t', 'forward' : ']t'},
+    \
+    \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g'},
+    \ }
+```
 
 ## Similar Projects
 
