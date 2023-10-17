@@ -2,20 +2,20 @@
 
 ## Introduction
 
-The goal of this plugin is allow to repeat moves with the `,` and `;` keys
+The goal of this plugin is allow to repeat motions with the `,` and `;` keys
 
-It is particularly useful for double key moves likes next/previous method: `[m`/`]m`.
+It is particularly useful for double key motions likes next/previous method: `[m`/`]m`.
 
 The repetition keys can be configured as to be done in the direction of:
-- the initial move
+- the initial motion
 - the document
 
-e.g. for `[m` move:
+e.g. for `[m` motion:
 
-If in the direction of the initial move as been selected then:
+If in the direction of the initial motion as been selected then:
 - `;` will do `[m` and `,` will do `]m`
 
-If in the direction of the initial move as been selected then:
+If in the direction of the initial motion as been selected then:
 - `;` will do `]m` and `,` will do `[m`
 
 

@@ -15,20 +15,20 @@ About ...................................................... |remotions-about|
 ==============================================================================
 INTRODUCTION                                *remotions* *remotions-introduction*
 
-The goal of this plugin is allow to repeat moves with the |,| and |;| keys
+The goal of this plugin is allow to repeat motions with the |,| and |;| keys
 
-It is particularly useful for double key moves likes next method: |[m|, |]m|.
+It is particularly useful for double key motions likes next method: |[m|, |]m|.
 
 The repetition keys can be configured as:
-- In the direction of the initial move
+- In the direction of the initial motion
 - In the direction of the document
 
-e.g. for |[m| move:
+e.g. for |[m| motion:
 
-If in the direction of the initial move as been selected then:
+If in the direction of the initial motion as been selected then:
 - |;| will do |[m| and |,| will do |]m|
 
-If in the direction of the initial move as been selected then:
+If in the direction of the initial motion as been selected then:
 - |;| will do |]m| and |,| will do |[m|
 
 
@@ -40,10 +40,10 @@ USAGE                                                        *remotions-usage*
 CONFIGURATION                                        *remotions-configuration*
 
 ------------------------------------------------------------------------------
-How to change the move direction                       *g:remotions_direction*
+How to change the motion direction                       *g:remotions_direction*
 
-By default move are repeated in the direction of the document. If you want to
-change that you can set the `g:remotions_direction` to 0
+By default motion are repeated in the direction of the document. If you want
+to change that you can set the `g:remotions_direction` to 0
 >
     let g:remotions_direction=0
 <
