@@ -18,6 +18,15 @@ If in the direction of the initial move as been selected then:
 If in the direction of the initial move as been selected then:
 - `;` will do `]m` and `,` will do `[m`
 
+## Quick Start
+
+Tested on Vim >= 8.1 and Neovim >= 0.8.3
+
+For [vim-plug](https://github.com/junegunn/vim-plug) users:
+```
+Plug 'vds2212/vim-remotions
+```
+
 ## Configuration
 
 ## Similar Projects
