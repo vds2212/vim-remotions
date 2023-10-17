@@ -18,9 +18,13 @@ If in the direction of the initial move as been selected then:
 If in the direction of the initial move as been selected then:
 - `;` will do `]m` and `,` will do `[m`
 
-## Quick Start
+
+# Requirements
 
 Tested on Vim >= 8.1 and Neovim >= 0.8.3
+
+
+# Installation
 
 For [vim-plug](https://github.com/junegunn/vim-plug) users:
 ```
