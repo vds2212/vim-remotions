@@ -26,7 +26,7 @@ If in the direction of the initial motion as been selected then:
 
 # Requirements
 
-Tested on Vim >= 8.1 and Neovim >= 0.8.3
+Tested on Vim >= 8.2 and Neovim >= 0.8.3
 
 
 # Installation

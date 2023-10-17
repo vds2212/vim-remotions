@@ -170,7 +170,7 @@ function! s:HijackMotion(modes, motion, key)
   " Return the plug used to replace it
 
   let mode_count = 0
-  for mode in a:modes
+  for mode in split(a:modes, '\zs')
     let mode_count = mode_count + 1
 
     let motion_mapping = maparg(a:motion, mode, 0, 1)
@@ -200,7 +200,7 @@ function! s:HijackMotion(modes, motion, key)
         endif
         execute cmd . a:motion
       else
-        for mode in motion_mapping.mode
+        for mode in split(motion_mapping.mode, '\zs')
           let cmd = mode . 'unmap '
           if motion_mapping.buffer
             let cmd = cmd . '<buffer> '
@@ -243,7 +243,7 @@ function! s:HijackMotions(modes, backward, forward, key)
   let backward_plug = s:HijackMotion(a:modes, a:backward, "backward" . a:key)
   let forward_plug = s:HijackMotion(a:modes, a:forward, "forward" . a:key)
 
-  for mode in a:modes
+  for mode in split(a:modes, '\zs')
     let mapping = {}
     let mapping.lhs = a:backward
     let mapping.mode = mode
@@ -265,7 +265,7 @@ function! s:ResetMappings()
   " Delete the mapping that have been added:
   if exists("b:added_mappings")
     for mapping in b:added_mappings
-      for mode in mapping.mode
+      for mode in split(mapping.mode, '\zs')
         if mode ==# 'o'
           continue
         endif
