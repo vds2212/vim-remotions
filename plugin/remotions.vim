@@ -84,8 +84,10 @@ function! s:RepeatMotion(forward)
   return ret
 endfunction
 
-nnoremap <silent> <expr> ; <SID>RepeatMotion(1)
-nnoremap <silent> <expr> , <SID>RepeatMotion(0)
+nmap <silent> <expr> ; <SID>RepeatMotion(1)
+nmap <silent> <expr> , <SID>RepeatMotion(0)
+" nnoremap <silent> <expr> ; <SID>RepeatMotion(1) " vim9
+" nnoremap <silent> <expr> , <SID>RepeatMotion(0) " vim9
 
 function! s:EeFfMotion(key)
   " Method called when the single char motion are used:
@@ -142,8 +144,8 @@ function! s:HijackMotion(motion, key)
   " Return the plug used to replace it
 
   let motion_mapping = maparg(a:motion, 'n', 0, 1)
-  let motion_key = '<Plug>(' .. a:key .. ')'
-  let motion_plug = "\<Plug>(" .. a:key .. ')'
+  let motion_key = '<Plug>(' . a:key . ')'
+  let motion_plug = "\<Plug>(" . a:key . ')'
 
   if len(motion_mapping) == 0
     " There is no mapping for that motion
@@ -154,7 +156,7 @@ function! s:HijackMotion(motion, key)
     let mapping.mode = 'n'
     let mapping.buffer = 1
     call add(b:added_mappings, mapping)
-    let cmd = 'nnoremap <buffer> <silent> ' .. motion_key .. ' ' .. a:motion
+    let cmd = 'nnoremap <buffer> <silent> ' . motion_key . ' ' . a:motion
     execute cmd
   else
     " There is a mapping for the motion
@@ -163,9 +165,9 @@ function! s:HijackMotion(motion, key)
     call add(b:deleted_mappings, motion_mapping)
     let cmd = 'nunmap '
     if motion_mapping.buffer
-      let cmd = cmd .. '<buffer> '
+      let cmd = cmd . '<buffer> '
     endif
-    execute cmd .. a:motion
+    execute cmd . a:motion
 
     " The plug is mapped to the original mapping rhs
 
@@ -177,7 +179,8 @@ function! s:HijackMotion(motion, key)
     let motion_mapping.lhsraw = motion_plug
     let motion_mapping.buffer = 1
     call add(b:added_mappings, motion_mapping)
-    call mapset(motion_mapping)
+    call mapset("n", 0, motion_mapping)
+    " call mapset(motion_mapping) " vim9
   endif
 
   return motion_plug
@@ -189,33 +192,33 @@ function! s:HijackMotions(backward, forward, key)
   " a backward and forward mapping that use the CustomMotion method
   " that use the plugged version of the mapping to make the original motion
 
-  let backward_plug = s:HijackMotion(a:backward, "backward" .. a:key)
-  let forward_plug = s:HijackMotion(a:forward, "forward" .. a:key)
+  let backward_plug = s:HijackMotion(a:backward, "backward" . a:key)
+  let forward_plug = s:HijackMotion(a:forward, "forward" . a:key)
 
   let mapping = {}
   let mapping.lhs = a:backward
   let mapping.mode = 'n'
   let mapping.buffer = 1
   call add(b:added_mappings, mapping)
-  execute 'nmap <buffer> <silent> <expr> ' .. a:backward .. " <SID>CustomMotion(0, '" .. backward_plug .. "', '" .. forward_plug .. "')"
+  execute 'nmap <buffer> <silent> <expr> ' . a:backward . " <SID>CustomMotion(0, '" . backward_plug . "', '" . forward_plug . "')"
 
   let mapping = {}
   let mapping.lhs = a:forward
   let mapping.mode = 'n'
   let mapping.buffer = 1
   call add(b:added_mappings, mapping)
-  execute 'nmap <buffer> <silent> <expr> ' .. a:forward .. " <SID>CustomMotion(1, '" .. backward_plug  .. "', '" .. forward_plug .. "')"
+  execute 'nmap <buffer> <silent> <expr> ' . a:forward . " <SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "')"
 endfunction
 
 function! s:ResetMappings()
   " Delete the mapping that have been added:
   if exists("b:added_mappings")
     for mapping in b:added_mappings
-      let cmd = mapping.mode .. 'unmap '
+      let cmd = mapping.mode . 'unmap '
       if mapping.buffer == 1
-        let cmd = cmd .. '<buffer> '
+        let cmd = cmd . '<buffer> '
       endif
-      let cmd = cmd .. mapping.lhs
+      let cmd = cmd . mapping.lhs
       execute cmd
     endfor
   endif
@@ -224,7 +227,8 @@ function! s:ResetMappings()
   " Restore the mapping that have been deleted:
   if exists("b:deleted_mappings")
     for mapping in b:deleted_mappings
-      call mapset(mapping)
+      call mapset("n", 0, mapping)
+      " call mapset(mapping) " vim9
     endfor
   endif
   let b:deleted_mappings = []

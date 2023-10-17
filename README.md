@@ -4,11 +4,11 @@
 
 The goal of this plugin is allow to repeat moves with the `,` and `;` keys
 
-It is particularly useful for double key moves likes next method: `[m`, `]m`.
+It is particularly useful for double key moves likes next/previous method: `[m`/`]m`.
 
-The repetition keys can be configured as:
-- In the direction of the initial move
-- In the direction of the document
+The repetition keys can be configured as to be done in the direction of:
+- the initial move
+- the document
 
 e.g. for `[m` move:
 
