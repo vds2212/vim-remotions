@@ -26,12 +26,12 @@ If in the direction of the document as been selected then:
 If in the direction of the initial motion as been selected then:
 
 
-# Requirements
+## Requirements
 
 Tested on Vim >= 8.2 and Neovim >= 0.8.3
 
 
-# Installation
+## Installation
 
 For [vim-plug](https://github.com/junegunn/vim-plug) users:
 ```
