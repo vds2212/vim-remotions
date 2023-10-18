@@ -34,7 +34,7 @@ Tested on Vim >= 8.2 and Neovim >= 0.8.3
 ## Installation
 
 For [vim-plug](https://github.com/junegunn/vim-plug) users:
-```
+```vim
 Plug 'vds2212/vim-remotions'
 ```
 
@@ -43,12 +43,12 @@ Plug 'vds2212/vim-remotions'
 ### Direction
 
 The direction of the repeated motion can be configured using the `g:remotions_direction`
-```
+```vim
 " Set the direction of the repetition to the initial move (the Vim default):
 let g:remotions_direction = 0
 ```
 
-```
+```vim
 " Set the direction of the repetition to the document:
 let g:remotions_direction = 1
 ```
@@ -57,7 +57,7 @@ let g:remotions_direction = 1
 
 It is possible to configure the motion that should be considered:
 
-```
+```vim
 " For each motion pairs three information has to be provided:
 " - Name of the pair
 " - The backward action
@@ -80,7 +80,7 @@ let g:remotions_motions = {
 ```
 
 Here is an more extensive list of motions:
-```
+```vim
 let g:remotions_motions = {
     \ 'para' : { 'backward' : '{', 'forward' : '}' },
     \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
