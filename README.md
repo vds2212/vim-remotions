@@ -35,7 +35,7 @@ Tested on Vim >= 8.2 and Neovim >= 0.8.3
 
 For [vim-plug](https://github.com/junegunn/vim-plug) users:
 ```
-Plug 'vds2212/vim-remotions
+Plug 'vds2212/vim-remotions'
 ```
 
 ## Configuration
