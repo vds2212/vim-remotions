@@ -3,11 +3,13 @@
 ## Introduction
 
 The `;` and `,` keys are repeating the `f`, `F`, `t` and `T` motions.
-But for the other motion there are no builtin ways to repeat them. 
+But for the other motions there are no builtin ways to repeat them. 
 
 The goal of this plugin is allow to repeat the other motions with the `;` and `,` keys
 
 It is particularly useful for double characters motions likes next/previous method: `[m`/`]m`.
+
+### Repetition Direction
 
 The repetition of the motions can be configured as to be done in the direction of:
 - the initial motion or of
@@ -42,12 +44,12 @@ Plug 'vds2212/vim-remotions
 
 The direction of the repeated motion can be configured using the `g:remotions_direction`
 ```
-" Set the direction of the repetition to the initial move:
+" Set the direction of the repetition to the initial move (the Vim default):
 let g:remotions_direction = 0
 ```
 
 ```
-" Set the direction of the repetition to the document (the default):
+" Set the direction of the repetition to the document:
 let g:remotions_direction = 1
 ```
 
