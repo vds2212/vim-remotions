@@ -4,15 +4,6 @@ let g:remotions_version = "0.1"
 
 let g:remotions_debug = 0
 
-        " \ 'line' : { 'backward' : 'k', 'forward' : 'j' },
-        " \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
-        " \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
-        " \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
-        " \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
-        " \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>' },
-        " \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
-        " \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
-
 if !exists("g:remotions_motions")
   let g:remotions_motions = {
         \ 'para' : { 'backward' : '{', 'forward' : '}' },
@@ -37,10 +28,10 @@ if !exists("g:remotions_direction")
   " If set to one:
   "   The forward and the backward (';', ',') repetitions are made in the
   "   direction of the document
-  " Otherwise:
+  " Otherwise (Vim default):
   "   The forward and the backward (';', ',') repetitions are made in the
   "   direction of the original motion (the standard behavior of ';', ',')
-  let g:remotions_direction = 1
+  let g:remotions_direction = 0
 endif
 
 if !exists("g:remotions_repeatcount")

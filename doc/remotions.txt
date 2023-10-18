@@ -1,4 +1,4 @@
-*remotions.txt*  Repeat motion behind f & t
+*remotions.txt*  Repeat motions behind f & t
 
 Author:  Vivian De Smedt
 License: Same terms as Vim itself (see |license|)
@@ -19,8 +19,8 @@ The goal of this plugin is allow to repeat motions with the |,| and |;| keys
 
 It is particularly useful for double key motions likes next method: |[m|, |]m|.
 
-The repetition keys can be configured as:
-- In the direction of the initial motion
+The repetition keys |;| can be configured to repeat the motion:
+- In the direction of the initial motion (the default) or
 - In the direction of the document
 
 e.g. for |[m| motion:
@@ -28,7 +28,7 @@ e.g. for |[m| motion:
 If in the direction of the initial motion as been selected then:
 - |;| will do |[m| and |,| will do |]m|
 
-If in the direction of the initial motion as been selected then:
+If in the direction of the document as been selected then:
 - |;| will do |]m| and |,| will do |[m|
 
 
@@ -40,12 +40,76 @@ USAGE                                                        *remotions-usage*
 CONFIGURATION                                        *remotions-configuration*
 
 ------------------------------------------------------------------------------
-How to change the motion direction                       *g:remotions_direction*
+How to configure the motions that are repeated           *g:remotions_motions*
 
-By default motion are repeated in the direction of the document. If you want
-to change that you can set the `g:remotions_direction` to 0
+Remotions use a table `g:remotions_motions` to list the motions to be repeatable.
+Each element of the table contains:
+- A name of the motion (need only to be unique
+- The sequence of characters of the backward motion
+- The sequence of characters of the forward motion
+ 
+The default value of the table is:
 >
-    let g:remotions_direction=0
+    let g:remotions_motions = {
+        \ 'para' : { 'backward' : '{', 'forward' : '}' },
+        \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
+        \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
+        \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
+        \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
+        \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
+        \
+        \ 'buffer' : { 'backward' : '[b', 'forward' : ']b'},
+        \ 'location' : { 'backward' : '[l', 'forward' : ']l'},
+        \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q'},
+        \ 'tag' : { 'backward' : '[t', 'forward' : ']t'},
+        \
+        \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g'},
+        \ }
+<
+
+A more extensive version of the table could be:
+>
+    let g:remotions_motions = {
+        \ 'para' : { 'backward' : '{', 'forward' : '}' },
+        \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
+        \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
+        \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
+        \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
+        \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
+        \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
+        \
+        \ 'line' : { 'backward' : 'k', 'forward' : 'j' },
+        \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
+        \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
+        \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
+        \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
+        \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>' },
+        \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
+        \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
+        \
+        \ 'arg' : { 'backward' : '[a', 'forward' : ']a'},
+        \ 'buffer' : { 'backward' : '[b', 'forward' : ']b'},
+        \ 'location' : { 'backward' : '[l', 'forward' : ']l'},
+        \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q'},
+        \ 'tag' : { 'backward' : '[t', 'forward' : ']t'},
+        \
+        \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g'},
+        \ }
+<
+
+------------------------------------------------------------------------------
+How to change the motion repetition direction           *g:remotions_direction*
+
+The Vim repeats the |F| and |T| motion in the direction of the motion
+(i.e. |;| search backward and |,| search forward for these moves).
+
+Remotions do the same by default for the other kind of movements.
+
+If you find more intuitive that |,| move backward and |;| move forward you can
+change the `g:remotions_direction` to 1.
+>
+    " Make the motion repetition in the direction of the document.
+    let g:remotions_direction=1
 <
 
 ==============================================================================
