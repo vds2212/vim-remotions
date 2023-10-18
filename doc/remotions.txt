@@ -35,6 +35,10 @@ If in the direction of the document as been selected then:
 ==============================================================================
 USAGE                                                        *remotions-usage*
 
+Make a motion (e.g. |]m| or |]]|).
+Repeat it using the |;| key.
+Undo it with the |,| key.
+
 
 ==============================================================================
 CONFIGURATION                                        *remotions-configuration*
