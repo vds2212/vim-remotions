@@ -40,19 +40,6 @@ Plug 'vds2212/vim-remotions'
 
 ## Configuration
 
-### Direction
-
-The direction of the repeated motion can be configured using the `g:remotions_direction`
-```vim
-" Set the direction of the repetition to the initial move (the Vim default):
-let g:remotions_direction = 0
-```
-
-```vim
-" Set the direction of the repetition to the document:
-let g:remotions_direction = 1
-```
-
 ### Motions
 
 It is possible to configure the motion that should be considered:
@@ -108,6 +95,33 @@ let g:remotions_motions = {
     \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g'},
     \ }
 ```
+
+### Direction
+
+The direction of the repeated motion can be configured using the `g:remotions_direction`
+```vim
+" Set the direction of the repetition to the initial move (the Vim default):
+let g:remotions_direction = 0
+```
+
+```vim
+" Set the direction of the repetition to the document:
+let g:remotions_direction = 1
+```
+
+### Repeat Count
+
+Some motions support |count| (e.g. |i|, |j|, |}|, etc.). E.g.: `2j` make the cursor go 2 lines below.
+
+When a motion is repeated via |;| or |,| the original count is not take into consideration.
+This is also the Vim default for the |f| and |t| motions.
+
+If you want that the original count is taken in consideration:
+```
+" Make the ; and , key also repeat the count when supported by the original move
+let g:remotions_repeat_count = 1
+```
+
 
 ## Similar Projects
 

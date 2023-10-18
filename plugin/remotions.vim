@@ -34,9 +34,9 @@ if !exists("g:remotions_direction")
   let g:remotions_direction = 0
 endif
 
-if !exists("g:remotions_repeatcount")
+if !exists("g:remotions_repeat_count")
   " If set to one the count of the original motion will also be repeated
-  let g:remotions_repeatcount = 0
+  let g:remotions_repeat_count = 0
 endif
 
 " The document backward sequence associated to the last motion or '' if the last
@@ -66,16 +66,20 @@ function! s:RepeatMotion(forward)
 
   call s:Log('RepeatMotion(' . a:forward . ')')
 
-  let ret = ""
+  let ret = ''
+  if g:remotions_repeat_count && g:remotions_count > 1
+    let ret = g:remotions_count
+  endif
+
   if xor(g:remotions_inverted, a:forward)
     if g:remotions_forward_plug != ''
-      let ret = g:remotions_forward_plug 
+      let ret = ret . g:remotions_forward_plug 
     else
       let ret = "\<Cmd>execute 'normal! ;'\<CR>"
     endif
   else
     if g:remotions_backward_plug != ''
-      let ret = g:remotions_backward_plug
+      let ret = ret . g:remotions_backward_plug
     else
       let ret = "\<Cmd>execute 'normal! ,'\<CR>"
     endif
