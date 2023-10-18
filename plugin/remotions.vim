@@ -6,6 +6,7 @@ let g:remotions_debug = 0
 
 if !exists("g:remotions_motions")
   let g:remotions_motions = {
+        \ 'EeFf' : {},
         \ 'para' : { 'backward' : '{', 'forward' : '}' },
         \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
         \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
@@ -13,6 +14,8 @@ if !exists("g:remotions_motions")
         \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
         \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
         \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
+        \
+        \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_count': 1 },
         \
         \ 'arg' : { 'backward' : '[a', 'forward' : ']a', 'doc': 'unimpaired' },
         \ 'buffer' : { 'backward' : '[b', 'forward' : ']b', 'doc': 'unimpaired' },
@@ -22,6 +25,34 @@ if !exists("g:remotions_motions")
         \
         \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g', 'doc': 'coc-diagnostic' },
         \ }
+" let g:remotions_motions = {
+"       \ 'EeFf' : {},
+"       \ 'para' : { 'backward' : '{', 'forward' : '}' },
+"       \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
+"       \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
+"       \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
+"       \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
+"       \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
+"       \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
+"       \
+"       \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_count': 1 },
+"       \ 'word' : { 'backward' : 'b', 'forward' : 'w', 'repeat_count': 1 },
+"       \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e', 'repeat_count': 1 },
+"       \ 'fullword' : { 'backward' : 'B', 'forward' : 'W', 'repeat_count': 1 },
+"       \ 'cursor' : { 'backward' : 'h', 'forward' : 'l', 'repeat_count': 1 },
+"       \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>', 'repeat_count' : 1 },
+"       \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>', 'repeat_count' : 1 },
+"       \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>', 'repeat_count' : 1},
+"       \
+"       \
+"       \ 'arg' : { 'backward' : '[a', 'forward' : ']a', 'doc': 'unimpaired' },
+"       \ 'buffer' : { 'backward' : '[b', 'forward' : ']b', 'doc': 'unimpaired' },
+"       \ 'location' : { 'backward' : '[l', 'forward' : ']l', 'doc': 'unimpaired' },
+"       \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q', 'doc': 'unimpaired' },
+"       \ 'tag' : { 'backward' : '[t', 'forward' : ']t', 'doc': 'unimpaired' },
+"       \
+"       \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g', 'doc': 'coc-diagnostic' },
+"       \ }
 endif
 
 if !exists("g:remotions_direction")
@@ -38,6 +69,9 @@ if !exists("g:remotions_repeat_count")
   " If set to one the count of the original motion will also be repeated
   let g:remotions_repeat_count = 0
 endif
+
+" The key associate to the last motion
+let g:remotions_key = ''
 
 " The document backward sequence associated to the last motion or '' if the last
 " motion is among 'f', 'F', 't' or 'T'
@@ -66,8 +100,20 @@ function! s:RepeatMotion(forward)
 
   call s:Log('RepeatMotion(' . a:forward . ')')
 
+  let motion = {}
+  if has_key(g:remotions_motions, g:remotions_key)
+    " For the 'EeFf' key there is no guarantee that the motion exist in the
+    " g:remotions_motion map
+    let motion = g:remotions_motions[g:remotions_key]
+  endif
+
+  let repeat_count = g:remotions_repeat_count
+  if has_key(motion, 'repeat_count')
+    let repeat_count = motion.repeat_count
+  endif
+
   let ret = ''
-  if g:remotions_repeat_count && g:remotions_count > 1
+  if repeat_count && g:remotions_count > 1
     let ret = g:remotions_count
   endif
 
@@ -75,13 +121,21 @@ function! s:RepeatMotion(forward)
     if g:remotions_forward_plug != ''
       let ret = ret . g:remotions_forward_plug 
     else
-      let ret = "\<Cmd>execute 'normal! ;'\<CR>"
+      let ret = "\<Cmd>execute 'normal! "
+      if repeat_count && g:remotions_count > 1
+        let ret = ret . g:remotions_count
+      endif
+      let ret = ret . ";'\<CR>"
     endif
   else
     if g:remotions_backward_plug != ''
       let ret = ret . g:remotions_backward_plug
     else
-      let ret = "\<Cmd>execute 'normal! ,'\<CR>"
+      let ret = "\<Cmd>execute 'normal! "
+      if repeat_count && g:remotions_count > 1
+        let ret = ret . g:remotions_count
+      endif
+      let ret = ret . ",'\<CR>"
     endif
   endif
 
@@ -101,8 +155,9 @@ vmap <silent> <expr> , <SID>RepeatMotion(0)
 function! s:EeFfMotion(key)
   " Method called when the single char motion are used:
   " - 'f' calls EeFfMotion('f')
-  " The method set the variable to be able to replay the motion
+  " The method set the variables to be able to replay the motion
 
+  let g:remotions_key = 'EeFf'
   let g:remotions_backward_plug = '' 
   let g:remotions_forward_plug = ''
 
@@ -134,10 +189,13 @@ vmap <expr> T <SID>EeFfMotion('T')
 " nnoremap <expr> t <SID>EeFfMotion('t')
 " nnoremap <expr> T <SID>EeFfMotion('T')
 
-function! s:CustomMotion(forward, backward_plug, forward_plug)
+function! s:CustomMotion(forward, backward_plug, forward_plug, key)
   " Method called when the original motion are used.
   " - ']m' calls CustomMotion(1, "\<Plug>forwardmethod", "\<Plug>backwardmethod")
-  " The method set the variable to be able to replay the motion
+  " The method set the variables to be able to replay the motion
+
+  " Used to gather more information about the motion
+  let g:remotions_key = a:key
 
   if a:forward
     let g:remotions_backward_plug = a:backward_plug
@@ -244,14 +302,14 @@ function! s:HijackMotions(modes, backward, forward, key)
     let mapping.mode = mode
     let mapping.buffer = 1
     call add(b:added_mappings, mapping)
-    execute mode . 'map <buffer> <silent> <expr> ' . a:backward . " <SID>CustomMotion(0, '" . backward_plug . "', '" . forward_plug . "')"
+    execute mode . 'map <buffer> <silent> <expr> ' . a:backward . " <SID>CustomMotion(0, '" . backward_plug . "', '" . forward_plug . "', '" . a:key . "')"
 
     let mapping = {}
     let mapping.lhs = a:forward
     let mapping.mode = mode
     let mapping.buffer = 1
     call add(b:added_mappings, mapping)
-    execute mode . 'map <buffer> <silent> <expr> ' . a:forward . " <SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "')"
+    execute mode . 'map <buffer> <silent> <expr> ' . a:forward . " <SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "', '" . a:key . "')"
   endfor
 endfunction
 
@@ -299,6 +357,9 @@ function! s:SetMappings()
   endif
 
   for name in keys(g:remotions_motions)
+    if name ==# 'EeFf'
+      continue
+    endif
     call s:HijackMotions('nv', g:remotions_motions[name].backward, g:remotions_motions[name].forward, name)
   endfor
 endfunction

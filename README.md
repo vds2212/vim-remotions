@@ -49,7 +49,9 @@ It is possible to configure the motion that should be considered:
 " - Name of the pair
 " - The backward action
 " - The forward action
+" - The repeat_count option for the motion
 let g:remotions_motions = {
+    \ 'EeFf' : {},
     \ 'para' : { 'backward' : '{', 'forward' : '}' },
     \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
     \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
@@ -69,6 +71,7 @@ let g:remotions_motions = {
 Here is an more extensive list of motions:
 ```vim
 let g:remotions_motions = {
+    \ 'EeFf' : {},
     \ 'para' : { 'backward' : '{', 'forward' : '}' },
     \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
     \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
@@ -77,7 +80,7 @@ let g:remotions_motions = {
     \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
     \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
     \
-    \ 'line' : { 'backward' : 'k', 'forward' : 'j' },
+    \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_count' : 1 },
     \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
     \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
     \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
@@ -95,6 +98,9 @@ let g:remotions_motions = {
     \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g'},
     \ }
 ```
+
+Remark: The `EeFf` motion correspond to the `e`, `f` motions.
+The entry can be used to specify a `repeat_count` if necessary.
 
 ### Direction
 
@@ -121,7 +127,7 @@ If you want that the original count is taken in consideration:
 " Make the ; and , key also repeat the count when supported by the original move
 let g:remotions_repeat_count = 1
 ```
-
+Remark: This `g:remotions_repeat_count` is overridden by the `repeat_count` argument of the motion if any.
 
 ## Similar Projects
 
