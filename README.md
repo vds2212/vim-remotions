@@ -9,7 +9,7 @@ The goal of this plugin is allow to repeat the other motions with the `;` and `,
 
 It is particularly useful for double characters motions likes next/previous method: `[m`/`]m`.
 
-It is also useful for motion with a count `10j` (10 lines down).
+It is also useful for motions with a count `10j` (10 lines down).
 It is possible to configure some motions to be repeatable only if they are executed with a count above 1.
 
 ### Repetition Direction
@@ -48,10 +48,9 @@ Plug 'vds2212/vim-remotions'
 It is possible to configure the motions that should be considered:
 For each motion three information have to be provided and some options can be set:
 - The `name` of the motion (e.g. `para`)
-  It only has to be unique (with the exception for the special `EeFf` name).
 
-- The `backward` key sequence (e.g. `{`)
-- The `forward` key sequence (e.g. `}`)
+- The `backward` motion key sequence (e.g. `{`)
+- The `forward` motion key sequence (e.g. `}`)
 
 - The `repeat_if_count` option for the motion.
   If set the motion is repeatable only if it has been executed with a count above of 1.

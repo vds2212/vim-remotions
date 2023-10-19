@@ -19,6 +19,10 @@ The goal of this plugin is allow to repeat motions with the |,| and |;| keys
 
 It is particularly useful for double key motions likes next method: |[m|, |]m|.
 
+It is also useful for motions with a count `10j` (10 lines down).
+It is possible to configure some motions to be repeatable only if they are
+executed with a count above 1.
+
 The repetition keys |;| can be configured to repeat the motion:
 - In the direction of the initial motion (the default) or
 - In the direction of the document
@@ -49,14 +53,17 @@ How to configure the motions that are repeated           *g:remotions_motions*
 Remotions use a table `g:remotions_motions` to list the motions to be repeatable.
 Each element of the table contains:
 - A `name` of the motion (need only to be unique)
-- The `backward` motion sequence of characters
-- The `forward` motion sequence of characters
+- The `backward` motion key sequence
+- The `forward` motion key sequence
 
-- A `repeat_if_count` option. If set the motion is repeated only if it has a
-  count
+- A `repeat_if_count` option.
+  If set the motion is repeated only if it has a count.
+
 - A `repeat_count` option that overrides `g:remotions_repeat_count`
   see |g:remotions_repeat_count| for more information.
+
 - A `direction` option that overrides the `g:remotions_direction`
+  see |g:remotions_direction| for more information.
  
 The default value of the table is:
 >
@@ -110,7 +117,7 @@ A more extensive version of the table could be:
         \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g'},
         \ }
 <
-Remark: The `EeFf` motion correspond to the |e|, |f| motions.
+Remark: The `EeFf` motion corresponds to the |e|, |f| motions.
 The entry can be used to specify a `repeat_count` if necessary.
 
 
@@ -149,6 +156,9 @@ If you want that the original count is taken in consideration:
 <
 Remark: This value is overridden by the `repeat_count` value of the motion if
 any.
+
+Remark: If the original motion doesn't support count the repetition will also
+not support count.
 
 ==============================================================================
 ABOUT                                                        *remotions-about*
