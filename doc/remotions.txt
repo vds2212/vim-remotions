@@ -97,10 +97,31 @@ A more extensive version of the table could be:
         \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
         \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
         \
-        \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_if_count' : 1, 'repeat_count': 1 },
-        \ 'char' : { 'backward' : 'h', 'forward' : 'l', 'repeat_if_count' : 1, 'repeat_count': 1 },
-        \ 'linescroll' : { 'backward' : '<C-e>', 'forward' : '<C-y>', 'repeat_if_count' : 1, 'repeat_count' : 1, 'direction' : 0 },
-        \ 'charscroll' : { 'backward' : 'zh', 'forward' : 'zl', 'repeat_if_count' : 1, 'repeat_count' : 1, 'direction' : 0 },
+        \ 'line' : {
+        \     'backward' : 'k',
+        \    'forward' : 'j',
+        \    'repeat_if_count' : 1,
+        \    'repeat_count': 1
+        \ },
+        \ 'char' : { 'backward' : 'h',
+        \    'forward' : 'l',
+        \    'repeat_if_count' : 1,
+        \    'repeat_count': 1
+        \ },
+        \ 'linescroll' : {
+        \    'backward' : '<C-e>',
+        \    'forward' : '<C-y>',
+        \    'repeat_if_count' : 1,
+        \    'repeat_count' : 1,
+        \    'direction' : 0 
+        \ },
+        \ 'charscroll' : { 
+        \    'backward' : 'zh',
+        \    'forward' : 'zl',
+        \    'repeat_if_count' : 1,
+        \    'repeat_count' : 1,
+        \    'direction' : 0
+        \ },
         \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
         \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
         \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
