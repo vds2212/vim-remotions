@@ -126,10 +126,10 @@ Remark: This `g:remotions_direction` setting is overridden by the `direction` op
 
 ### Repeat Count
 
-Some motions support |count| (e.g. |i|, |j|, |}|, etc.). E.g.: `2j` make the cursor go 2 lines below.
+Some motions support `count` (e.g. `i`, `j`, `}`, etc.). E.g.: `2j` make the cursor go 2 lines below.
 
-When a motion is repeated via |;| or |,| the original count is not take into consideration.
-This is also the Vim default for the |f| and |t| motions.
+When a motion is repeated via `;` or `,` the original count is not take into consideration.
+This is also the Vim default for the `f` and `t` motions.
 
 If you want that the original count is taken in consideration:
 ```vim
