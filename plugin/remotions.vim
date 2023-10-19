@@ -74,11 +74,11 @@ endif
 " The key associate to the last motion
 let g:remotions_family = ''
 
-" The document backward sequence associated to the last motion or '' if the last
+" The motion backward sequence associated to the last motion or '' if the last
 " motion is among 'f', 'F', 't' or 'T'
 let g:remotions_backward_plug = ''
 
-" The document forward sequence associated to the last motion or '' if the last
+" The motion forward sequence associated to the last motion or '' if the last
 " motion is among 'f', 'F', 't' or 'T'
 let g:remotions_forward_plug = ''
 
@@ -160,7 +160,8 @@ function! s:EeFfMotion(key)
 
   let motion = {}
   if has_key(g:remotions_motions, 'EfFf')
-  let motion = g:remotions_motions[a:key]
+    let motion = g:remotions_motions[a:key]
+  endif
   if v:count <= 1 && has_key(motion, 'repeat_if_count') && motion.repeat_if_count == 1
     " Skip the motion with the option 'repeat_if_count' if the count is <= 1
     return
