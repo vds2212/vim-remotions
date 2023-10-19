@@ -48,11 +48,15 @@ How to configure the motions that are repeated           *g:remotions_motions*
 
 Remotions use a table `g:remotions_motions` to list the motions to be repeatable.
 Each element of the table contains:
-- A name of the motion (need only to be unique
-- The sequence of characters of the backward motion
-- The sequence of characters of the forward motion
-- An optional repeat_count option (that overrides `g:remotions_repeat_count`)
+- A `name` of the motion (need only to be unique)
+- The `backward` motion sequence of characters
+- The `forward` motion sequence of characters
+
+- A `repeat_if_count` option. If set the motion is repeated only if it has a
+  count
+- A `repeat_count` option that overrides `g:remotions_repeat_count`
   see |g:remotions_repeat_count| for more information.
+- A `direction` option that overrides the `g:remotions_direction`
  
 The default value of the table is:
 >
@@ -86,8 +90,10 @@ A more extensive version of the table could be:
         \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
         \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
         \
-        \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_count' : 1 },
-        \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
+        \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_if_count' : 1, 'repeat_count': 1 },
+        \ 'char' : { 'backward' : 'h', 'forward' : 'l', 'repeat_if_count' : 1, 'repeat_count': 1 },
+        \ 'linescroll' : { 'backward' : '<C-e>', 'forward' : '<C-y>', 'repeat_if_count' : 1, 'repeat_count' : 1, 'direction' : 0 },
+        \ 'charscroll' : { 'backward' : 'zh', 'forward' : 'zl', 'repeat_if_count' : 1, 'repeat_count' : 1, 'direction' : 0 },
         \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
         \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
         \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
@@ -122,6 +128,9 @@ change the `g:remotions_direction` to 1.
     " Make the motion repetition in the direction of the document.
     let g:remotions_direction=1
 <
+Remark: This value is overridden by the `direction` value of the motion if
+any.
+
 
 ------------------------------------------------------------------------------
 How to repeat the original motion count             *g:remotions_repeat_count*
@@ -138,7 +147,6 @@ If you want that the original count is taken in consideration:
     " when supported by the original move
     let g:remotions_repeat_count = 1
 <
-
 Remark: This value is overridden by the `repeat_count` value of the motion if
 any.
 
