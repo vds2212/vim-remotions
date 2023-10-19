@@ -111,7 +111,7 @@ let g:remotions_motions = {
     \ }
 ```
 
-Remark: The `EeFf` motion correspond to the `e`, `f` motions.
+Remark: The `EeFf` motion corresponds to the `e`, `f` motions.
 The entry can be used to specify the option for that motion (i.e.: `repeat_if_count`, `repeat_count`, `direction`) if necessary.
 
 ### Direction
