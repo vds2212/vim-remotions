@@ -45,11 +45,16 @@ Plug 'vds2212/vim-remotions'
 It is possible to configure the motion that should be considered:
 
 ```vim
-" For each motion pairs three information has to be provided:
-" - Name of the pair
-" - The backward action
-" - The forward action
-" - The repeat_count option for the motion
+" For each motion pairs three information has to be provided and some options can be set:
+" - The `name` of the motion
+" - The `backward` action
+" - The `forward` action
+"
+" - The `repeat_if_count` option for the motion.
+"   If set the motion is repeatable only if it has been executed with a count different of 1
+" - The `repeat_count` option for the motion. If present override `g:remotions_repeat_count` for the motion
+" - The `direction` option for the motion. If present override `g:remotions_direction` for the motion
+
 let g:remotions_motions = {
     \ 'EeFf' : {},
     \ 'para' : { 'backward' : '{', 'forward' : '}' },
@@ -80,14 +85,16 @@ let g:remotions_motions = {
     \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
     \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
     \
-    \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_count' : 1 },
-    \ 'word' : { 'backward' : 'b', 'forward' : 'w' },
-    \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
-    \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
-    \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
-    \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>' },
-    \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
-    \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
+    \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_if_count' : 1, 'repeat_count': 1 },
+    \ 'char' : { 'backward' : 'h', 'forward' : 'l', 'repeat_if_count' : 1, 'repeat_count': 1 },
+    \ 'linescroll' : { 'backward' : '<C-e>', 'forward' : '<C-y>', 'repeat_if_count' : 1, 'repeat_count' : 1, 'direction' : 0 },
+    \ 'charscroll' : { 'backward' : 'zh', 'forward' : 'zl', 'repeat_if_count' : 1, 'repeat_count' : 1, 'direction' : 0 },
+    \ 'word' : { 'backward' : 'b', 'forward' : 'w', 'repeat_count': 1 },
+    \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e', 'repeat_count': 1 },
+    \ 'fullword' : { 'backward' : 'B', 'forward' : 'W', 'repeat_count': 1 },
+    \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>', 'repeat_count' : 1, 'direction' : 0 },
+    \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>', 'repeat_count' : 1 },
+    \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>', 'repeat_count' : 1},
     \
     \ 'arg' : { 'backward' : '[a', 'forward' : ']a'},
     \ 'buffer' : { 'backward' : '[b', 'forward' : ']b'},
@@ -115,6 +122,8 @@ let g:remotions_direction = 0
 let g:remotions_direction = 1
 ```
 
+Remark: This `g:remotions_direction` setting is overridden by the `direction` option of the motion if any.
+
 ### Repeat Count
 
 Some motions support |count| (e.g. |i|, |j|, |}|, etc.). E.g.: `2j` make the cursor go 2 lines below.
@@ -123,11 +132,11 @@ When a motion is repeated via |;| or |,| the original count is not take into con
 This is also the Vim default for the |f| and |t| motions.
 
 If you want that the original count is taken in consideration:
-```
+```vim
 " Make the ; and , key also repeat the count when supported by the original move
 let g:remotions_repeat_count = 1
 ```
-Remark: This `g:remotions_repeat_count` is overridden by the `repeat_count` argument of the motion if any.
+Remark: This `g:remotions_repeat_count` is overridden by the `repeat_count` option of the motion if any.
 
 ## Similar Projects
 

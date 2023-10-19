@@ -46,7 +46,6 @@ if !exists("g:remotions_motions")
 "       \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>', 'repeat_count' : 1 },
 "       \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>', 'repeat_count' : 1},
 "       \
-"       \
 "       \ 'arg' : { 'backward' : '[a', 'forward' : ']a', 'doc': 'unimpaired' },
 "       \ 'buffer' : { 'backward' : '[b', 'forward' : ']b', 'doc': 'unimpaired' },
 "       \ 'location' : { 'backward' : '[l', 'forward' : ']l', 'doc': 'unimpaired' },
