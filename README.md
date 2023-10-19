@@ -43,18 +43,23 @@ Plug 'vds2212/vim-remotions'
 ### Motions
 
 It is possible to configure the motion that should be considered:
+For each motion three information have to be provided and some options can be set:
+- The `name` of the motion (e.g. `para`)
+  It only have to be unique with the exception for the special `EeFf` name.
+
+- The `backward` key sequence (e.g. `{`)
+- The `forward` key sequence (e.g. `}`)
+
+- The `repeat_if_count` option for the motion.
+  If set the motion is repeatable only if it has been executed with a count different of 1
+
+- The `repeat_count` option for the motion.
+  If present overrides `g:remotions_repeat_count` of the motion
+
+- The `direction` option for the motion.
+  If present overrides `g:remotions_direction` of the motion
 
 ```vim
-" For each motion pairs three information has to be provided and some options can be set:
-" - The `name` of the motion
-" - The `backward` action
-" - The `forward` action
-"
-" - The `repeat_if_count` option for the motion.
-"   If set the motion is repeatable only if it has been executed with a count different of 1
-" - The `repeat_count` option for the motion. If present override `g:remotions_repeat_count` for the motion
-" - The `direction` option for the motion. If present override `g:remotions_direction` for the motion
-
 let g:remotions_motions = {
     \ 'EeFf' : {},
     \ 'para' : { 'backward' : '{', 'forward' : '}' },
