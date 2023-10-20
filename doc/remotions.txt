@@ -1,4 +1,4 @@
-*remotions.txt*  Repeat motions behind f & t
+*remotions.txt*  Repeat motions with ; and , behind f & t
 
 Author:  Vivian De Smedt
 License: Same terms as Vim itself (see |license|)

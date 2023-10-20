@@ -15,7 +15,6 @@ if !exists("g:remotions_motions")
         \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
         \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
         \
-        \
         \ 'arg' : { 'backward' : '[a', 'forward' : ']a', 'doc': 'unimpaired' },
         \ 'buffer' : { 'backward' : '[b', 'forward' : ']b', 'doc': 'unimpaired' },
         \ 'location' : { 'backward' : '[l', 'forward' : ']l', 'doc': 'unimpaired' },
@@ -169,7 +168,7 @@ function! s:EeFfMotion(key)
 
   let direction = g:remotions_direction
   if has_key(motion, 'direction')
-    direction = motion.direction
+    let direction = motion.direction
   endif
 
   let g:remotions_family = 'EeFf'
