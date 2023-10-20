@@ -95,16 +95,32 @@ let g:remotions_motions = {
     \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
     \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
     \
-    \ 'line' : { 'backward' : 'k', 'forward' : 'j', 'repeat_if_count' : 1, 'repeat_count': 1 },
-    \ 'char' : { 'backward' : 'h', 'forward' : 'l', 'repeat_if_count' : 1, 'repeat_count': 1 },
-    \ 'linescroll' : { 'backward' : '<C-e>', 'forward' : '<C-y>', 'repeat_if_count' : 1, 'repeat_count' : 1, 'direction' : 0 },
-    \ 'charscroll' : { 'backward' : 'zh', 'forward' : 'zl', 'repeat_if_count' : 1, 'repeat_count' : 1, 'direction' : 0 },
-    \ 'word' : { 'backward' : 'b', 'forward' : 'w', 'repeat_count': 1 },
-    \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e', 'repeat_count': 1 },
-    \ 'fullword' : { 'backward' : 'B', 'forward' : 'W', 'repeat_count': 1 },
-    \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>', 'repeat_count' : 1, 'direction' : 0 },
-    \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>', 'repeat_count' : 1 },
-    \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>', 'repeat_count' : 1},
+    \ 'line' : {
+    \     'backward' : 'k',
+    \    'forward' : 'j',
+    \    'repeat_if_count' : 1,
+    \    'repeat_count': 1
+    \ },
+    \ 'char' : { 'backward' : 'h',
+    \    'forward' : 'l',
+    \    'repeat_if_count' : 1,
+    \    'repeat_count': 1
+    \ },
+    \
+    \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
+    \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
+    \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
+    \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>' },
+    \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
+    \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
+    \
+    \ 'undo' : { 'backward' : 'u', 'forward' : '<C-r>', 'direction' : 1 },
+    \
+    \ 'linescroll' : { 'backward' : '<C-e>', 'forward' : '<C-y>' },
+    \ 'charscroll' : { 'backward' : 'zh', 'forward' : 'zl' },
+    \
+    \ 'vsplit' : { 'backward' : '<C-w><', 'forward' : '<C-w>>' },
+    \ 'hsplit' : { 'backward' : '<C-w>-', 'forward' : '<C-w>+' },
     \
     \ 'arg' : { 'backward' : '[a', 'forward' : ']a'},
     \ 'buffer' : { 'backward' : '[b', 'forward' : ']b'},
