@@ -222,7 +222,7 @@ function! s:CustomMotion(forward, backward_plug, forward_plug, motion_family)
 
   let direction = g:remotions_direction
   if has_key(motion, 'direction')
-    direction = motion.direction
+    let direction = motion.direction
   endif
 
   " Used to gather more information about the motion
