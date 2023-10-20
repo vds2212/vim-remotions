@@ -107,10 +107,25 @@ let g:remotions_motions = {
     \    'repeat_count': 1
     \ },
     \
-    \ 'fullword' : { 'backward' : 'B', 'forward' : 'W' },
-    \ 'wordend' : { 'backward' : 'ge', 'forward' : 'e' },
-    \ 'cursor' : { 'backward' : 'h', 'forward' : 'l' },
+    \ 'word' : {
+    \    'backward' : 'b',
+    \    'forward' : 'w',
+    \    'repeat_if_count' : 1,
+    \    'repeat_count': 1
+    \ },
+    \ 'fullword' : { 'backward' : 'B',
+    \    'forward' : 'W',
+    \    'repeat_if_count' : 1,
+    \    'repeat_count': 1
+    \ },
+    \ 'wordend' : { 'backward' : 'ge',
+    \    'forward' : 'e',
+    \    'repeat_if_count' : 1,
+    \    'repeat_count': 1
+    \ },
+    \
     \ 'pos' : { 'backward' : '<C-i>', 'forward' : '<C-o>' },
+    \
     \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
     \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
     \
