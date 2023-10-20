@@ -129,6 +129,9 @@ A more extensive version of the table could be:
         \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>' },
         \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>' },
         \
+        \ 'vsplit' : { 'backward' : '<C-w><', 'forward' : '<C-w>>' },
+        \ 'hsplit' : { 'backward' : '<C-w>-', 'forward' : '<C-w>+' },
+        \
         \ 'arg' : { 'backward' : '[a', 'forward' : ']a'},
         \ 'buffer' : { 'backward' : '[b', 'forward' : ']b'},
         \ 'location' : { 'backward' : '[l', 'forward' : ']l'},

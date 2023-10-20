@@ -45,6 +45,9 @@ if !exists("g:remotions_motions")
 "       \ 'page' : { 'backward' : '<C-u>', 'forward' : '<C-d>', 'repeat_count' : 1 },
 "       \ 'pagefull' : { 'backward' : '<C-b>', 'forward' : '<C-f>', 'repeat_count' : 1},
 "       \
+"       \ 'vsplit' : { 'backward' : '<C-w><', 'forward' : '<C-w>>', 'direction' : 0 },
+"       \ 'hsplit' : { 'backward' : '<C-w>-', 'forward' : '<C-w>+', 'direction' : 0 },
+"       \
 "       \ 'arg' : { 'backward' : '[a', 'forward' : ']a', 'doc': 'unimpaired' },
 "       \ 'buffer' : { 'backward' : '[b', 'forward' : ']b', 'doc': 'unimpaired' },
 "       \ 'location' : { 'backward' : '[l', 'forward' : ']l', 'doc': 'unimpaired' },
@@ -378,6 +381,8 @@ function! RemotionsResetMappings()
 endfunction
 
 function! s:SetMappings()
+  call s:Log("SetMappings()")
+
   call RemotionsResetMappings()
 
   for motion_family in keys(g:remotions_motions)
@@ -386,9 +391,29 @@ function! s:SetMappings()
     endif
     call s:HijackMotions('nv', g:remotions_motions[motion_family].backward, g:remotions_motions[motion_family].forward, motion_family)
   endfor
+
+  call s:Log("SetMappings() ->")
+endfunction
+
+function s:BufNew()
+  " Not working since:
+  " - bufnr('%') != expand('<abuf>')
+  " - can't switch buffer in this call back
+endfunction
+
+function s:BufEnter()
+  if &filetype != ''
+    return
+  endif
+  if exists('b:added_mappings')
+    return
+  endif
+  call s:SetMappings()
 endfunction
 
 function! s:SetFileType()
+  call s:Log("SetFileType()")
+
   call s:SetMappings()
   if !exists('b:undo_ftplugin')
     let b:undo_ftplugin = ''
@@ -397,12 +422,15 @@ function! s:SetFileType()
   " Otherwise the RemotionsResetMapping that comes with SetMapping could
   " unset some of the filetype mappings
   let b:undo_ftplugin = 'call RemotionsResetMappings()|' . b:undo_ftplugin
+
+  call s:Log("SetFileType() ->")
 endfunction
 
 augroup remotions
   " Make sure the mapping are reset one time per buffer
   " By creating only one callback
   autocmd!
-  autocmd BufNew * call <SID>SetMappings()
+  " autocmd BufNew * call <SID>BufNew()
+  autocmd BufEnter * call <SID>BufEnter()
   autocmd FileType * call <SID>SetFileType()
 augroup END
