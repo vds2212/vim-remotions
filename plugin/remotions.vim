@@ -249,6 +249,8 @@ endfunction
 function! s:HijackMotion(modes, motion, motion_family)
   " Replace the motion mapping from motion to a plugged version
   " Return the plug used to replace it
+  " Rational: The original motion mapping need to be redirected to an action
+  " that store the context
 
   let mode_count = 0
   for mode in split(a:modes, '\zs')
