@@ -20,13 +20,14 @@ The repetition of the motions can be configured as to be done in the direction o
 
 e.g. When the `[m` motion will be repeated:
 
+If "direction of the document" as been selected then:
 - The forward repetition `;` will do `]m` and
 - The backward repetition `,` will do `[m`
-If in the direction of the document as been selected then:
 
+If "direction of the initial motion" as been selected then:
 - The forward repetition `;` will do `[m` and
 - The backward repetition `,` will do `]m`
-If in the direction of the initial motion as been selected then:
+
 
 
 ## Requirements
