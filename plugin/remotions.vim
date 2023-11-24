@@ -206,15 +206,17 @@ vmap <expr> T <SID>EeFfMotion('T')
 " nnoremap <expr> t <SID>EeFfMotion('t')
 " nnoremap <expr> T <SID>EeFfMotion('T')
 
-function! s:CustomMotion(forward, backward_plug, forward_plug, motion_family)
+function! s:CustomMotion(forward, backward_plug, forward_plug, motion_plug, motion_family)
   " Method called when the original motion are used.
   " - ']m' calls CustomMotion(1, "\<Plug>forwardmethod", "\<Plug>backwardmethod")
   " The method set the variables to be able to replay the motion
   "
-  if a:forward
+  if a:forward == 1
     let ret = a:forward_plug
-  else
+  elseif a:forward == 0
     let ret = a:backward_plug
+  elseif a:forward == 2
+    let ret = a:motion_plug
   endif
 
   let motion = g:remotions_motions[a:motion_family]
@@ -250,8 +252,10 @@ function! s:CustomMotion(forward, backward_plug, forward_plug, motion_family)
 endfunction
 
 function! s:HijackMotion(modes, motion, motion_family)
-  " Replace the motion mapping from motion to a plugged version
-  " Return the plug used to replace it
+  " Replace the original motion mapping by a plugged version
+  " - A plug motion is created with the original content
+  " - The original mapping is deleted
+  " - The plug motion is returned
   " Rational: The original motion mapping need to be redirected to an action
   " that store the context
 
@@ -320,29 +324,50 @@ function! s:HijackMotion(modes, motion, motion_family)
   return motion_plug
 endfunction
 
-function! s:HijackMotions(modes, backward, forward, motion_family)
-  " Introduce a plugged version of the backward and forward mapping
-  " Replace the backward and forward mapping by
-  " a backward and forward mapping that use the CustomMotion method
-  " that use the plugged version of the mapping to make the original motion
+function! s:HijackMotions(modes, backward, forward, motion, motion_plug, motion_family)
+  " Introduce a plugged version of the backward and forward motions
+  " Replace the backward and forward motion by
+  " a backward and forward motion that use the CustomMotion method
+  " that use the plugged version of the motion to execute the original motion
 
-  let backward_plug = s:HijackMotion(a:modes, a:backward, "backward" . a:motion_family)
-  let forward_plug = s:HijackMotion(a:modes, a:forward, "forward" . a:motion_family)
+  if a:motion == ''
+    let backward_plug = s:HijackMotion(a:modes, a:backward, "backward" . a:motion_family)
+    let forward_plug = s:HijackMotion(a:modes, a:forward, "forward" . a:motion_family)
+
+    let motion_plug = ''
+  else
+    let backward_plug = a:backward
+    let forward_plug = a:forward
+
+    let motion_plug = a:motion_plug
+    if motion_plug == ''
+      let motion_plug = s:HijackMotion(a:modes, a:motion, "motion" . a:motion_family)
+    endif
+  endif
 
   for mode in split(a:modes, '\zs')
-    let mapping = {}
-    let mapping.lhs = a:backward
-    let mapping.mode = mode
-    let mapping.buffer = 1
-    call add(b:added_mappings, mapping)
-    execute mode . 'map <buffer> <silent> <expr> ' . a:backward . " <SID>CustomMotion(0, '" . backward_plug . "', '" . forward_plug . "', '" . a:motion_family . "')"
+    if a:motion == ''
+      let mapping = {}
+      let mapping.lhs = a:backward
+      let mapping.mode = mode
+      let mapping.buffer = 1
+      call add(b:added_mappings, mapping)
+      execute mode . 'map <buffer> <silent> <expr> ' . a:backward . " <SID>CustomMotion(0, '" . backward_plug . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
 
-    let mapping = {}
-    let mapping.lhs = a:forward
-    let mapping.mode = mode
-    let mapping.buffer = 1
-    call add(b:added_mappings, mapping)
-    execute mode . 'map <buffer> <silent> <expr> ' . a:forward . " <SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "', '" . a:motion_family . "')"
+      let mapping = {}
+      let mapping.lhs = a:forward
+      let mapping.mode = mode
+      let mapping.buffer = 1
+      call add(b:added_mappings, mapping)
+      execute mode . 'map <buffer> <silent> <expr> ' . a:forward . " <SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
+    else
+      let mapping = {}
+      let mapping.lhs = a:motion
+      let mapping.mode = mode
+      let mapping.buffer = 1
+      call add(b:added_mappings, mapping)
+      execute mode . 'map <buffer> <silent> <expr> ' . a:motion . " <SID>CustomMotion(2, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
+    endif
   endfor
 endfunction
 
@@ -389,7 +414,15 @@ function! s:SetMappings()
     if motion_family ==# 'EeFf'
       continue
     endif
-    call s:HijackMotions('nv', g:remotions_motions[motion_family].backward, g:remotions_motions[motion_family].forward, motion_family)
+    let motion = ''
+    if has_key(g:remotions_motions[motion_family], 'motion')
+      let motion = g:remotions_motions[motion_family].motion
+    endif
+    let motion_plug = ''
+    if has_key(g:remotions_motions[motion_family], 'motion_plug')
+      let motion_plug = g:remotions_motions[motion_family].motion_plug
+    endif
+    call s:HijackMotions('nv', g:remotions_motions[motion_family].backward, g:remotions_motions[motion_family].forward, motion, motion_plug, motion_family)
   endfor
 
   call s:Log("SetMappings() ->")
