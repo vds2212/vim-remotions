@@ -180,9 +180,62 @@ let g:remotions_repeat_count = 1
 ```
 Remark: This `g:remotions_repeat_count` is overridden by the `repeat_count` option of the motion if set.
 
+
+### Special Motions
+
+#### Leap
+
+Leap motion is special because:
+- It is triggered by one key `s` but repeated by other keys (configurable in case of leap)
+- Remotions can't currently hijack the motion the motion plug has to be specified
+
+Here is a solution for repeating the leap motions:
+
+```vim
+lua require('leap').add_repeat_mappings('<Plug>(leapforward)', '<Plug>(leapbackward)')
+
+let g:remotions_motions = {
+      \ 'leap_fwd' : {
+      \     'backward' : '<Plug>(leapbackward)',
+      \     'forward' : '<Plug>(leapforward)',
+      \     'motion': 's',
+      \     'motion_plug' : '<Plug>(leap-forward-to)
+      \ },
+      \ 'leap_bckwd' : {
+      \     'backward' : '<Plug>(leapbackward)',
+      \     'forward' : '<Plug>(leapforward)',
+      \     'motion': 's',
+      \     'motion_plug' : '<Plug>(leap-backward-to)
+      \ },
+```
+
 ## Similar Projects
 
-- [repmo.vim](https://www.vim.org/scripts/script.php?script_id=2174)
-- [repeatable-motions.vim](https://www.vim.org/scripts/script.php?script_id=4914)
-- [repeat-motion](https://www.vim.org/scripts/script.php?script_id=3665)
+### Repmo
+
+The [repmo.vim](https://www.vim.org/scripts/script.php?script_id=2174)
+or its new [version](https://github.com/Houl/repmo-vim)
+is mature plugin used by a number of people.
+
+In my experience repmo works well for builtin commands.
+But when the builtin command are overridden for a specific `filetype` (e.g. `]m` for the `python` `filetype`).
+or when it is overridden by a `filetype` plugin (e.g. `]m` with [pythonsense](https://github.com/jeetsukumaran/vim-pythonsense))
+I had difficulty to make it working (I failed).
+
+I'm wondering also how repmo handle commands that are overridden by two different plugins for two different `filetype`.
+
+These difficulty made me write [remotions](https://github.com/vds2212/vim-remotions).
+
+If one of the previous statements about repmo is imprecise or wrong I'll more than happy to rectify the text.
+Raise an issue and I will adapt the text of this readme file.
+
+
+### Repeatable-Motions
+
+[repeatable-motions.vim](https://www.vim.org/scripts/script.php?script_id=4914)
+
+
+### Repeat Motion
+
+[repeat-motion](https://www.vim.org/scripts/script.php?script_id=3665)
 
