@@ -181,31 +181,73 @@ let g:remotions_repeat_count = 1
 Remark: This `g:remotions_repeat_count` is overridden by the `repeat_count` option of the motion if set.
 
 
-### Special Motions
+### Special Motion
+
+Motion plugin are special because:
+- They are triggered by a key or a key combination that is not the one used to repeat the action
+- The hijacking of the trigger could requires some hint
+
+Here are the configuration proposed for some of the popular ones:
+- [vim-easymotion](https://github.com/easymotion/vim-easymotion)
+- [leap.nvim](https://github.com/ggandor/leap.nvim)
+- [vim-sneak](https://github.com/justinmk/vim-sneak)
+
+
+#### EasyMotion
+
+Here is a solution for repeating the [vim-easymotion](https://github.com/easymotion/vim-easymotion) motions:
+
+```vim
+let g:remotions_motions = {
+   \   'leap_fwd' : {
+   \       'backward' : '<Plug>(easymotion-prev)',
+   \       'forward' : '<Plug>(easymotion-next)',
+   \       'motion': '<leader><leader>',
+   \       'motion_plug' : '<Plug>(easymotion-prefix)'
+   \   },
+   \ }
+```
 
 #### Leap
 
-Leap motion is special because:
-- It is triggered by one key `s` but repeated by other keys (configurable in case of leap)
-- Remotions can't currently hijack the motion the motion plug has to be specified
-
-Here is a solution for repeating the leap motions:
+Here is a solution for repeating the [leap.nvim](https://github.com/ggandor/leap.nvim) motions:
 
 ```vim
 lua require('leap').add_repeat_mappings('<Plug>(leapforward)', '<Plug>(leapbackward)')
 
 let g:remotions_motions = {
-      \ 'leap_fwd' : {
-      \     'backward' : '<Plug>(leapbackward)',
-      \     'forward' : '<Plug>(leapforward)',
+   \   'leap_fwd' : {
+   \       'backward' : '<Plug>(leapbackward)',
+   \       'forward' : '<Plug>(leapforward)',
+   \       'motion': 's',
+   \       'motion_plug' : '<Plug>(leap-forward-to)'
+   \   },
+   \   'leap_bck' : {
+   \       'backward' : '<Plug>(leapbackward)',
+   \       'forward' : '<Plug>(leapforward)',
+   \       'motion': 's',
+   \       'motion_plug' : '<Plug>(leap-backward-to)'
+   \   },
+   \ }
+```
+
+#### Sneak
+
+Here is a solution for repeating the [vim-sneak](https://github.com/justinmk/vim-sneak) motions:
+
+```vim
+let g:remotions_motions = {
+      \ 'sneak_fwd' : {
+      \     'backward' : '<Plug>Sneak_,',
+      \     'forward' : '<Plug>Sneak_;',
       \     'motion': 's',
-      \     'motion_plug' : '<Plug>(leap-forward-to)
+      \     'motion_plug' : '<Plug>Sneak_s'
       \ },
-      \ 'leap_bckwd' : {
-      \     'backward' : '<Plug>(leapbackward)',
-      \     'forward' : '<Plug>(leapforward)',
+      \ 'sneak_bckwd' : {
+      \     'backward' : '<Plug>Sneak_,',
+      \     'forward' : '<Plug>Sneak_;',
       \     'motion': 's',
-      \     'motion_plug' : '<Plug>(leap-backward-to)
+      \     'motion_plug' : '<Plug>Sneak_S'
       \ },
 ```
 
@@ -237,5 +279,6 @@ Raise an issue and I will adapt the text of this readme file.
 
 ### Repeat Motion
 
-[repeat-motion](https://www.vim.org/scripts/script.php?script_id=3665)
+According to the documentation [repeat-motion](https://www.vim.org/scripts/script.php?script_id=3665)
+only repeat a set of predefined builtin motions (i.e. `k`, `j`, `h`, `l`, `w`, `b`, `W`, `B`, `e`, `E`, `ge`, `gE`)
 
