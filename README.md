@@ -183,11 +183,11 @@ Remark: This `g:remotions_repeat_count` is overridden by the `repeat_count` opti
 
 ### Special Motion
 
-Motion plugin are special because:
+Motion plugins are special because:
 - They are triggered by a key or a key combination that is not the one used to repeat the action
 - The hijacking of the trigger could requires some hint
 
-Here are the configuration proposed for some of the popular ones:
+Here are the configurations proposed for some of the popular ones:
 - [vim-easymotion](https://github.com/easymotion/vim-easymotion)
 - [leap.nvim](https://github.com/ggandor/leap.nvim)
 - [vim-sneak](https://github.com/justinmk/vim-sneak)
