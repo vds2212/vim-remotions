@@ -281,27 +281,32 @@ function! s:HijackMotion(modes, motion, motion_family)
     else
       " There is a mapping for the motion
 
-      " The original mapping is deleted
-      call add(b:deleted_mappings, motion_mapping)
-      if motion_mapping.mode == ' ' || motion_mapping.mode == ''
-        let cmd = 'unmap '
-        if motion_mapping.buffer
-          let cmd = cmd . '<buffer> '
-        endif
-        execute cmd . a:motion
-      else
-        for mode in split(motion_mapping.mode, '\zs')
-          let cmd = mode . 'unmap '
+      " The original mapping is deleted if it is buffer mapping
+      " in order to avoid the conflict with the new mapping
+      " otherwise it is kept since the other buffer should find the original
+      " mapping
+      if motion_mapping.buffer
+        call add(b:deleted_mappings, motion_mapping)
+        if motion_mapping.mode == ' ' || motion_mapping.mode == ''
+          let cmd = 'unmap '
           if motion_mapping.buffer
             let cmd = cmd . '<buffer> '
           endif
           execute cmd . a:motion
-        endfor
+        else
+          for mode in split(motion_mapping.mode, '\zs')
+            let cmd = mode . 'unmap '
+            if motion_mapping.buffer
+              let cmd = cmd . '<buffer> '
+            endif
+            execute cmd . a:motion
+          endfor
+        endif
       endif
 
       " The plug is mapped to the original mapping rhs
 
-      " Remark: Copy the mapping to avoid modifying the backup used for the
+      " Remark: Copy the original mapping to avoid modifying the backup used for the
       " reset of the mapping
       let motion_mapping = copy(motion_mapping)
       let motion_mapping.lhs = motion_key
