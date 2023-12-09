@@ -274,7 +274,21 @@ Raise an issue and I will adapt the text of this readme file.
 
 ### Repeatable-Motions
 
-[repeatable-motions.vim](https://www.vim.org/scripts/script.php?script_id=4914)
+The [repeatable-motions.vim](https://www.vim.org/scripts/script.php?script_id=4914) is a mature plugin.
+
+It introduces four keys to repeat the motions:
+- <kbd>Ctrl j</kbd>, <kbd>Ctrl k</kbd> for the vertical motions.
+- <kbd>Ctrl h</kbd>, <kbd>Ctrl l</kbd> for the horizontal motions.
+
+In my experience repeatable-motions works well for builtin commands.
+It supports a number of builtin motions.
+
+But when the builtin command are overridden for a specific `filetype` (e.g. `]m` for the `python` `filetype`).
+or when it is overridden by a `filetype` plugin (e.g. `]m` with [pythonsense](https://github.com/jeetsukumaran/vim-pythonsense))
+I had difficulty to make it working (I failed).
+
+If one of the previous statements about repeatable-motions is imprecise or wrong I'll more than happy to rectify the text.
+Raise an issue and I will adapt the text of this readme file.
 
 
 ### Repeat Motion
