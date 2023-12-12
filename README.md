@@ -9,6 +9,8 @@ The goal of this plugin is allow to repeat the other motions with the `;` and `,
 
 It is particularly useful for double characters motions likes next/previous method: `[m`/`]m`.
 
+### Count
+
 It is also useful for motions with a count `10j` (10 lines down).
 It is possible to configure some motions to be repeatable only if they are executed with a count above 1.
 
@@ -28,6 +30,11 @@ If "direction of the initial motion" has been selected then:
 - The forward repetition `;` will do `[m` and
 - The backward repetition `,` will do `]m`
 
+### Advantages
+
+The advantages of remotions on the other existing plugins identified are:
+- support also plugin motions/operation defined both globally or at buffer level
+- support repetition of movements including their count if different from 1 (optional)
 
 
 ## Requirements
