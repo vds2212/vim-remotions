@@ -230,9 +230,9 @@ let g:remotions_motions = {
    \       'motion_plug' : '<Plug>(leap-forward-to)'
    \   },
    \   'leap_bck' : {
-   \       'backward' : '<Plug>(leapbackward)',
-   \       'forward' : '<Plug>(leapforward)',
-   \       'motion': 's',
+   \       'backward' : '<Plug>(leapforward)',
+   \       'forward' : '<Plug>(leapbackward)',
+   \       'motion': 'S',
    \       'motion_plug' : '<Plug>(leap-backward-to)'
    \   },
    \ }
