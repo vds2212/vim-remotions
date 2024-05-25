@@ -6,7 +6,7 @@ let g:remotions_debug = 0
 
 if !exists("g:remotions_motions")
   let g:remotions_motions = {
-        \ 'EeFf' : {},
+        \ 'TtFf' : {},
         \ 'para' : { 'backward' : '{', 'forward' : '}' },
         \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
         \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
@@ -25,7 +25,7 @@ if !exists("g:remotions_motions")
         \ }
 
 " let g:remotions_motions = {
-"       \ 'EeFf' : {},
+"       \ 'TtFf' : {},
 "       \ 'para' : { 'backward' : '{', 'forward' : '}' },
 "       \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
 "       \ 'change' : { 'backward' : 'g,', 'forward' : 'g;', 'direction' : 0 },
@@ -105,7 +105,7 @@ function! s:RepeatMotion(forward)
 
   let motion = {}
   if has_key(g:remotions_motions, g:remotions_family)
-    " For the 'EeFf' key there is no guarantee that the motion exist in the
+    " For the 'TtFf' key there is no guarantee that the motion exist in the
     " g:remotions_motions map
     let motion = g:remotions_motions[g:remotions_family]
   endif
@@ -155,14 +155,18 @@ vmap <silent> <expr> , <SID>RepeatMotion(0)
 " nnoremap <silent> <expr> ; <SID>RepeatMotion(1) " vim9
 " nnoremap <silent> <expr> , <SID>RepeatMotion(0) " vim9
 
-function! s:EeFfMotion(key)
+function! s:TtFfMotion(key)
   " Method called when the single char motion are used:
-  " - 'f' calls EeFfMotion('f')
+  " - 'f' calls TtFfMotion('f')
   " The method set the variables to be able to replay the motion
 
   let motion = {}
-  if has_key(g:remotions_motions, 'EfFf')
-    let motion = g:remotions_motions[a:key]
+  if has_key(g:remotions_motions, 'EeFf')
+    " For backward compatibility reason the old document key was 'EeFf'
+    let motion = g:remotions_motions['EeFf']
+  endif
+  if has_key(g:remotions_motions, 'TtFf')
+    let motion = g:remotions_motions['TtFf']
   endif
   if v:count <= 1 && has_key(motion, 'repeat_if_count') && motion.repeat_if_count == 1
     " Skip the motion with the option 'repeat_if_count' if the count is <= 1
@@ -174,7 +178,7 @@ function! s:EeFfMotion(key)
     let direction = motion.direction
   endif
 
-  let g:remotions_family = 'EeFf'
+  let g:remotions_family = 'TtFf'
   let g:remotions_backward_plug = '' 
   let g:remotions_forward_plug = ''
 
@@ -189,22 +193,38 @@ function! s:EeFfMotion(key)
   return a:key
 endfunction
 
-nmap <expr> f <SID>EeFfMotion('f')
-vmap <expr> f <SID>EeFfMotion('f')
+if maparg('f', 'n', 0, 1)->empty()
+  nmap <expr> f <SID>TtFfMotion('f')
+endif
+if maparg('f', 'v', 0, 1)->empty()
+  vmap <expr> f <SID>TtFfMotion('f')
+endif
 
-nmap <expr> F <SID>EeFfMotion('F')
-vmap <expr> F <SID>EeFfMotion('F')
+if maparg('F', 'n', 0, 1)->empty()
+  nmap <expr> F <SID>TtFfMotion('F')
+endif
+if maparg('F', 'v', 0, 1)->empty()
+  vmap <expr> F <SID>TtFfMotion('F')
+endif
 
-nmap <expr> t <SID>EeFfMotion('t')
-vmap <expr> t <SID>EeFfMotion('t')
+if maparg('t', 'n', 0, 1)->empty()
+  nmap <expr> t <SID>TtFfMotion('t')
+endif
+if maparg('t', 'v', 0, 1)->empty()
+  vmap <expr> t <SID>TtFfMotion('t')
+endif
 
-nmap <expr> T <SID>EeFfMotion('T')
-vmap <expr> T <SID>EeFfMotion('T')
+if maparg('T', 'n', 0, 1)->empty()
+  nmap <expr> T <SID>TtFfMotion('T')
+endif
+if maparg('T', 'v', 0, 1)->empty()
+  vmap <expr> T <SID>TtFfMotion('T')
+endif
 
-" nnoremap <expr> f <SID>EeFfMotion('f')
-" nnoremap <expr> F <SID>EeFfMotion('F')
-" nnoremap <expr> t <SID>EeFfMotion('t')
-" nnoremap <expr> T <SID>EeFfMotion('T')
+" nnoremap <expr> f <SID>TtFfMotion('f')
+" nnoremap <expr> F <SID>TtFfMotion('F')
+" nnoremap <expr> t <SID>TtFfMotion('t')
+" nnoremap <expr> T <SID>TtFfMotion('T')
 
 function! s:CustomMotion(forward, backward_plug, forward_plug, motion_plug, motion_family)
   " Method called when the original motion are used.
@@ -416,7 +436,7 @@ function! s:SetMappings()
   call RemotionsResetMappings()
 
   for motion_family in keys(g:remotions_motions)
-    if motion_family ==# 'EeFf'
+    if motion_family ==# 'TtFf'
       continue
     endif
     let motion = ''

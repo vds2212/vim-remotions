@@ -74,7 +74,7 @@ For each motion three information have to be provided and some options can be se
 Here is the Remotions default:
 ```vim
 let g:remotions_motions = {
-    \ 'EeFf' : {},
+    \ 'TtFf' : {},
     \ 'para' : { 'backward' : '{', 'forward' : '}' },
     \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
     \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
@@ -104,11 +104,17 @@ let g:remotions_motions = {
     \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
     \
     \ 'line' : {
-    \     'backward' : 'k',
+    \    'backward' : 'k',
     \    'forward' : 'j',
     \    'repeat_if_count' : 1,
     \    'repeat_count': 1
     \ },
+    \ 'displayline' : {
+    \    'backward' : 'gk',
+    \    'forward' : 'gj',
+    \    'repeat_count': 1
+    \ },
+    \
     \ 'char' : { 'backward' : 'h',
     \    'forward' : 'l',
     \    'repeat_if_count' : 1,
@@ -140,7 +146,8 @@ let g:remotions_motions = {
     \ 'undo' : { 'backward' : 'u', 'forward' : '<C-r>', 'direction' : 1 },
     \
     \ 'linescroll' : { 'backward' : '<C-e>', 'forward' : '<C-y>' },
-    \ 'charscroll' : { 'backward' : 'zh', 'forward' : 'zl' },
+    \ 'columnscroll' : { 'backward' : 'zh', 'forward' : 'zl' },
+    \ 'columnsscroll' : { 'backward' : 'zH', 'forward' : 'zL' },
     \
     \ 'vsplit' : { 'backward' : '<C-w><', 'forward' : '<C-w>>' },
     \ 'hsplit' : { 'backward' : '<C-w>-', 'forward' : '<C-w>+' },
