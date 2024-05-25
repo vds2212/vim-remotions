@@ -94,7 +94,7 @@ let g:remotions_motions = {
 Here is an more extensive list of motions:
 ```vim
 let g:remotions_motions = {
-    \ 'EeFf' : {},
+    \ 'TtFf' : {},
     \ 'para' : { 'backward' : '{', 'forward' : '}' },
     \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
     \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
@@ -112,7 +112,6 @@ let g:remotions_motions = {
     \ 'displayline' : {
     \    'backward' : 'gk',
     \    'forward' : 'gj',
-    \    'repeat_count': 1
     \ },
     \
     \ 'char' : { 'backward' : 'h',
@@ -162,14 +161,14 @@ let g:remotions_motions = {
     \ }
 ```
 
-Remark: The `EeFf` motion corresponds to the `e`, `f` motions.
+Remark: The `TtFf` motion corresponds to the `e`, `f` motions.
 The entry can be used to specify the options for that motion (i.e.: `repeat_if_count`, `repeat_count`, `direction`).
 
 #### Lua example
 The following is an example of usage with [lazy.nvim](https://github.com/folke/lazy.nvim):
 ```
 local motions = {
-  EeFf = {},
+  TtFf = {},
   para = { backward = "{", forward = "}" },
   sentence = { backward = "(", forward = ")" },
   change = { backward = "g,", forward = "g;" },

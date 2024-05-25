@@ -68,7 +68,7 @@ Each element of the table contains:
 The default value of the table is:
 >
     let g:remotions_motions = {
-        \ 'EeFf' : {},
+        \ 'TtFf' : {},
         \ 'para' : { 'backward' : '{', 'forward' : '}' },
         \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
         \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
@@ -85,10 +85,10 @@ The default value of the table is:
         \ }
 <
 
-A more extensive version of the table could be:
+Here is an more extensive list of motions:
 >
     let g:remotions_motions = {
-        \ 'EeFf' : {},
+        \ 'TtFf' : {},
         \ 'para' : { 'backward' : '{', 'forward' : '}' },
         \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
         \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
@@ -103,6 +103,11 @@ A more extensive version of the table could be:
         \    'repeat_if_count' : 1,
         \    'repeat_count': 1
         \ },
+        \ 'displayline' : {
+        \    'backward' : 'gk',
+        \    'forward' : 'gj',
+        \ },
+        \
         \ 'char' : { 'backward' : 'h',
         \    'forward' : 'l',
         \    'repeat_if_count' : 1,
@@ -134,7 +139,8 @@ A more extensive version of the table could be:
         \ 'undo' : { 'backward' : 'u', 'forward' : '<C-r>', 'direction' : 1 },
         \
         \ 'linescroll' : { 'backward' : '<C-e>', 'forward' : '<C-y>' },
-        \ 'charscroll' : { 'backward' : 'zh', 'forward' : 'zl' },
+        \ 'columnscroll' : { 'backward' : 'zh', 'forward' : 'zl' },
+        \ 'columnsscroll' : { 'backward' : 'zH', 'forward' : 'zL' },
         \
         \ 'vsplit' : { 'backward' : '<C-w><', 'forward' : '<C-w>>' },
         \ 'hsplit' : { 'backward' : '<C-w>-', 'forward' : '<C-w>+' },
@@ -148,7 +154,7 @@ A more extensive version of the table could be:
         \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g'},
         \ }
 <
-Remark: The `EeFf` motion corresponds to the |e|, |f| motions.
+Remark: The `TtFf` motion corresponds to the |e|, |f| motions.
 The entry can be used to specify a `repeat_count` if necessary.
 
 
