@@ -166,7 +166,7 @@ The entry can be used to specify the options for that motion (i.e.: `repeat_if_c
 
 #### Lua example
 The following is an example of usage with [lazy.nvim](https://github.com/folke/lazy.nvim):
-```
+```lua
 local motions = {
   TtFf = {},
   para = { backward = "{", forward = "}" },
