@@ -103,15 +103,23 @@ function! s:RepeatMotion(forward)
 
   call s:Log('RepeatMotion(' . a:forward . ')')
 
+  if type(g:remotions_motions) != v:t_dict
+    echom $'g:remotions_motions is not a dictionary'
+  endif
+
   let motion = {}
-  if has_key(g:remotions_motions, g:remotions_family)
+  if type(g:remotions_motions) == v:t_dict && has_key(g:remotions_motions, g:remotions_family)
     " For the 'TtFf' key there is no guarantee that the motion exist in the
     " g:remotions_motions map
     let motion = g:remotions_motions[g:remotions_family]
   endif
 
+  if type(motion) != v:t_dict
+    echom $"g:remotions_motions['{g:remotions_family}'] is: {motion} and not a dictionary"
+  endif
+
   let repeat_count = g:remotions_repeat_count
-  if has_key(motion, 'repeat_count')
+  if type(motion) == v:t_dict && has_key(motion, 'repeat_count')
     let repeat_count = motion.repeat_count
   endif
 
@@ -168,13 +176,18 @@ function! s:TtFfMotion(key)
   if has_key(g:remotions_motions, 'TtFf')
     let motion = g:remotions_motions['TtFf']
   endif
-  if v:count <= 1 && has_key(motion, 'repeat_if_count') && motion.repeat_if_count == 1
+
+  if type(motion) != v:t_dict
+    echom $"g:remotions_motions['TtFf'] is: {motion} and not a dictionary"
+  endif
+
+  if v:count <= 1 && type(motion) == v:t_dict && has_key(motion, 'repeat_if_count') && motion.repeat_if_count == 1
     " Skip the motion with the option 'repeat_if_count' if the count is <= 1
     return
   endif
 
   let direction = g:remotions_direction
-  if has_key(motion, 'direction')
+  if type(motion) == v:t_dict && has_key(motion, 'direction')
     let direction = motion.direction
   endif
 
@@ -240,13 +253,17 @@ function! s:CustomMotion(forward, backward_plug, forward_plug, motion_plug, moti
   endif
 
   let motion = g:remotions_motions[a:motion_family]
-  if v:count <= 1 && has_key(motion, 'repeat_if_count') && motion.repeat_if_count == 1
+  if type(motion) != v:t_dict
+    echom $"g:remotions_motions['{a:motion_family}'] is: {motion} and not a dictionary"
+  endif
+
+  if v:count <= 1 && type(motion) == v:t_dict && has_key(motion, 'repeat_if_count') && motion.repeat_if_count == 1
     " Skip the motion with the option 'repeat_if_count' if the count is <= 1
     return ret
   endif
 
   let direction = g:remotions_direction
-  if has_key(motion, 'direction')
+  if type(motion) == v:t_dict && has_key(motion, 'direction')
     let direction = motion.direction
   endif
 
