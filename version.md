@@ -5,7 +5,10 @@ Version 2.3 (2024/07/09)
 ------------------------
 
 Make the code more robust to wrong g:remotions_motions values.
-In particular `g:remotions_motions = { 'TtFf' : [] }` induced by `vim.g.remotions_motions = { TtFf = {}}`
+In particular `g:remotions_motions = { 'TtFf' : [] }` induced by:
+```lua
+vim.g.remotions_motions = { TtFf = {}}
+```
 
 
 Version 2.2 (2024/05/25)
