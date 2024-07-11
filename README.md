@@ -2,10 +2,10 @@
 
 ## Introduction
 
-The `;` and `,` keys are repeating the `f`, `F`, `t` and `T` motions.
-But for the other motions there are no builtin ways to repeat them.
+In standard Vim/Neovim the `;` and `,` keys repeats the `f`, `F`, `t` and `T` motions.
+But for the other motions or actions (e.g. `}`, `]m`, <kbd>Ctrl+w</kbd>`>`) there are no builtin ways to repeat them.
 
-The goal of this plugin is allow to repeat the other motions with the `;` and `,` keys.
+The goal of this plugin is allow to repeat the other motions or actions using the `;` and `,` keys.
 
 It is particularly useful for double characters motions likes next/previous method: `[m`/`]m`.
 
@@ -17,8 +17,8 @@ It is possible to configure some motions to be repeatable only if they are execu
 ### Repetition Direction
 
 The repetition of the motions can be configured as to be done in the direction of:
-- the initial motion (`;` repeat the motion, `,` undo the motion, the Vim default) or of
-- the document (`;` goes forward, `,` goes backward)
+- The initial motion (`;` repeat the motion, `,` undo the motion, the Vim/Neovim default) or of
+- The document (`;` goes forward, `,` goes backward)
 
 e.g. When the `[m` motion will be repeated:
 
@@ -33,8 +33,8 @@ If "direction of the initial motion" has been selected then:
 ### Advantages
 
 The advantages of remotions on the other existing plugins identified are:
-- support also plugin motions/operation defined both globally or at buffer level
-- support repetition of movements including their count if different from 1 (optional)
+- It supports also plugin motions/operation defined both globally or at buffer level
+- It supports repetition of motion including their count if different from 1 (optional)
 
 
 ## Requirements
@@ -47,6 +47,33 @@ Tested on Vim >= 8.2 and Neovim >= 0.8.3
 For [vim-plug](https://github.com/junegunn/vim-plug) users:
 ```vim
 Plug 'vds2212/vim-remotions'
+```
+
+For [lazy.vim]() users:
+```lua
+local motions = {
+  para = { backward = "{", forward = "}" },
+  sentence = { backward = "(", forward = ")" },
+  change = { backward = "g,", forward = "g;" },
+  class = { backward = "[[", forward = "]]" },
+  classend = { backward = "[]", forward = "][" },
+  method = { backward = "[m", forward = "]m" },
+  methodend = { backward = "[M", forward = "]M" },
+  arg = { backward = "[a", forward = "]a" },
+  buffer = { backward = "[b", forward = "]b" },
+  location = { backward = "[l", forward = "]l" },
+  quickfix = { backward = "[q", forward = "]q" },
+  tag = { backward = "[t", forward = "]t" },
+  diagnostic = { backward = "[g", forward = "]g" },
+}
+return {
+  "vds2212/vim-remotions",
+  event = { "BufRead", "BufWinEnter", "BufNewFile" },
+
+  config = function()
+      vim.g.remotions_motions = motions
+  end,
+}
 ```
 
 ## Configuration
