@@ -130,7 +130,7 @@ function! s:RepeatMotion(forward)
 
   if xor(g:remotions_inverted, a:forward)
     if g:remotions_forward_plug != ''
-      let ret = ret . g:remotions_forward_plug 
+      let ret = ret . g:remotions_forward_plug
     else
       let ret = "\<Cmd>execute 'normal! "
       if repeat_count && g:remotions_count > 1
@@ -192,7 +192,7 @@ function! s:TtFfMotion(key)
   endif
 
   let g:remotions_family = 'TtFf'
-  let g:remotions_backward_plug = '' 
+  let g:remotions_backward_plug = ''
   let g:remotions_forward_plug = ''
 
   let g:remotions_count = v:count
