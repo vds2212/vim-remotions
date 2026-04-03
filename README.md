@@ -51,29 +51,35 @@ Plug 'vds2212/vim-remotions'
 
 For [lazy.vim]() users:
 ```lua
-local motions = {
-  para = { backward = "{", forward = "}" },
-  sentence = { backward = "(", forward = ")" },
-  change = { backward = "g,", forward = "g;" },
-  class = { backward = "[[", forward = "]]" },
-  classend = { backward = "[]", forward = "][" },
-  method = { backward = "[m", forward = "]m" },
-  methodend = { backward = "[M", forward = "]M" },
-  arg = { backward = "[a", forward = "]a" },
-  buffer = { backward = "[b", forward = "]b" },
-  location = { backward = "[l", forward = "]l" },
-  quickfix = { backward = "[q", forward = "]q" },
-  tag = { backward = "[t", forward = "]t" },
-  diagnostic = { backward = "[g", forward = "]g" },
-}
-return {
-  "vds2212/vim-remotions",
-  event = { "BufRead", "BufWinEnter", "BufNewFile" },
-
+{
+  'vds2212/vim-remotions',
+  event = { 'BufRead', 'BufWinEnter', 'BufNewFile' },
   config = function()
-      vim.g.remotions_motions = motions
+    local motions = {
+      para = { backward = '{', forward = '}' },
+      sentence = { backward = '(', forward = ')' },
+      change = { backward = 'g,', forward = 'g;' },
+      class = { backward = '[[', forward = ']]' },
+      classend = { backward = '[]', forward = '][' },
+      method = { backward = '[m', forward = ']m' },
+      methodend = { backward = '[M', forward = ']M' },
+      arg = { backward = '[a', forward = ']a' },
+      buffer = { backward = '[b', forward = ']b' },
+      location = { backward = '[l', forward = ']l' },
+      quickfix = { backward = '[q', forward = ']q' },
+      tag = { backward = '[t', forward = ']t' },
+      diagnostic = { backward = '[d', forward = ']d' },
+
+      linescroll = { backward = "<C-e>", forward = "<C-y>" },
+      charscroll = { backward = "zh", forward = "zl" },
+      vsplit = { backward = "<C-w><", forward = "<C-w>>" },
+      hsplit = { backward = "<C-w>-", forward = "<C-w>+" },
+    }
+    vim.g.remotions_motions = motions
+    -- Make the ',' and ';' acting in the direction of the document:
+    vim.g.remotions_direction = 1
   end,
-}
+},
 ```
 
 ## Configuration
