@@ -313,6 +313,7 @@ function! s:HijackMotion(modes, motion, motion_family)
     let motion_mapping = maparg(a:motion, mode, 0, 1)
     let motion_key = '<Plug>(' . a:motion_family . ')'
     let motion_plug = "\<Plug>(" . a:motion_family . ')'
+    let desc = ""
     if has_key(motion_mapping, "desc")
       let desc = motion_mapping.desc
       " echom 'motion:' . a:motion . ", desc: '" . desc . "'"
