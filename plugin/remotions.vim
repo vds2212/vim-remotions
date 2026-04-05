@@ -1,6 +1,6 @@
 " Setting sections:
 
-let g:remotions_version = "0.1"
+let g:remotions_version = "2.4"
 
 let g:remotions_debug = 0
 
