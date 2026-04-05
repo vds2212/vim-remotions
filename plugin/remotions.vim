@@ -2,7 +2,9 @@
 
 let g:remotions_version = "2.4"
 
-let g:remotions_debug = 0
+if !exists('g:remotions_debug')
+  let g:remotions_debug = 0
+endif
 
 if !exists("g:remotions_motions")
   let g:remotions_motions = {
@@ -296,7 +298,14 @@ function! s:HijackMotion(modes, motion, motion_family)
   " Rational: The original motion mapping need to be redirected to an action
   " that store the context
 
-  let desc = ""
+  if !exists('b:added_mappings')
+    let b:added_mappings = []
+  endif
+
+  if !exists('b:deleted_mappings')
+    let b:deleted_mappings = []
+  endif
+
   let mode_count = 0
   for mode in split(a:modes, '\zs')
     let mode_count = mode_count + 1
@@ -581,7 +590,7 @@ function! s:SetFileType()
   " Undo the mapping when the filetype is unset
   " Otherwise the RemotionsResetMapping that comes with SetMapping could
   " unset some of the filetype mappings
-  let b:undo_ftplugin = 'call RemotionsResetMappings()|' . b:undo_ftplugin
+  " let b:undo_ftplugin = 'call RemotionsResetMappings()|' . b:undo_ftplugin
 
   call s:Log("SetFileType() ->")
 endfunction
