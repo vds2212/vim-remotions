@@ -11,8 +11,9 @@ It is particularly useful for double characters motions likes next/previous meth
 
 ### Count
 
-It is also useful for motions with a count `10j` (10 lines down).
-It is possible to configure some motions to be repeatable only if they are executed with a count above 1.
+It is possible to configure some motions to be:
+- repeated with their count (`repeat_count = 1`)
+- repeatable only if they are executed with a count above 1 (`repeat_if_count = 1`).
 
 ### Repetition Direction
 
@@ -22,11 +23,11 @@ The repetition of the motions can be configured as to be done in the direction o
 
 e.g. When the `[m` motion will be repeated:
 
-If "direction of the document" has been selected then:
+If "direction of the document" has been selected (`directon = 1`) then:
 - The forward repetition `;` will do `]m` and
 - The backward repetition `,` will do `[m`
 
-If "direction of the initial motion" has been selected then:
+If "direction of the initial motion" has been selected (`direction = 0`) then:
 - The forward repetition `;` will do `[m` and
 - The backward repetition `,` will do `]m`
 
@@ -56,24 +57,96 @@ For [lazy.vim]() users:
   event = { 'BufRead', 'BufWinEnter', 'BufNewFile' },
   config = function()
     local motions = {
-      para = { backward = '{', forward = '}' },
-      sentence = { backward = '(', forward = ')' },
-      change = { backward = 'g,', forward = 'g;' },
-      class = { backward = '[[', forward = ']]' },
-      classend = { backward = '[]', forward = '][' },
-      method = { backward = '[m', forward = ']m' },
-      methodend = { backward = '[M', forward = ']M' },
-      arg = { backward = '[a', forward = ']a' },
-      buffer = { backward = '[b', forward = ']b' },
-      location = { backward = '[l', forward = ']l' },
-      quickfix = { backward = '[q', forward = ']q' },
-      tag = { backward = '[t', forward = ']t' },
-      diagnostic = { backward = '[d', forward = ']d' },
+      para = {
+        backward = '{', forward = '}',
+        backward_desc = 'Previous paragraph',
+        forward_desc = 'Next paragraph',
+      },
+      sentence = {
+        backward = '(', forward = ')',
+        backward_desc = 'Previous sentence',
+        forward_desc = 'Next sentence',
+      },
+      change = {
+        backward = 'g,', forward = 'g;',
+        backward_desc = 'Previous change',
+        forward_desc = 'Next change',
+      },
+      class = {
+        backward = '[[', forward = ']]',
+        backward_desc = 'Previous class start',
+        forward_desc = 'Next class start',
+      },
+      classend = {
+        backward = '[]', forward = '][',
+        backward_desc = 'Previous class end',
+        forward_desc = 'Next class end',
+      },
+      method = {
+        backward = '[m', forward = ']m',
+        backward_desc = 'Previous method start',
+        forward_desc = 'Next method start',
+      },
+      methodend = {
+        backward = '[M', forward = ']M',
+        backward_desc = 'Previous method end',
+        forward_desc = 'Next method end',
+      },
+      arg = {
+        backward = '[a', forward = ']a',
+        backward_desc = 'Previous argument',
+        forward_desc = 'Next argument',
+      },
+      buffer = {
+        backward = '[b', forward = ']b',
+        backward_desc = 'Previous buffer',
+        forward_desc = 'Next buffer',
+      },
+      location = {
+        backward = '[l', forward = ']l',
+        backward_desc = 'Previous location',
+        forward_desc = 'Next location',
+      },
+      quickfix = {
+        backward = '[q', forward = ']q',
+        backward_desc = 'Previous fix',
+        forward_desc = 'Next fix',
+      },
+      tag = {
+        backward = '[t', forward = ']t',
+        backward_desc = 'Previous tag',
+        forward_desc = 'Next tag',
+      },
+      diagnostic = {
+        backward = '[d', forward = ']d',
+        backward_desc = 'Previous diagnostic',
+        forward_desc = 'Next diagnostic',
+      },
 
-      linescroll = { backward = "<C-e>", forward = "<C-y>" },
-      charscroll = { backward = "zh", forward = "zl" },
-      vsplit = { backward = "<C-w><", forward = "<C-w>>" },
-      hsplit = { backward = "<C-w>-", forward = "<C-w>+" },
+      linescroll = {
+        backward = '<C-e>',
+        forward = '<C-y>',
+        backward_desc = 'Scroll down',
+        forward_desc = 'Scroll up',
+      },
+      charscroll = {
+        backward = 'zh',
+        forward = 'zl',
+        backward_desc = 'Scroll left',
+        forward_desc = 'Scroll right',
+      },
+      vsplit = {
+        backward = '<C-w><',
+        forward = '<C-w>>',
+        backward_desc = 'Decrease window width',
+        forward_desc = 'Increase window width',
+      },
+      hsplit = {
+        backward = '<C-w>-',
+        forward = '<C-w>+',
+        backward_desc = 'Decrease window height',
+        forward_desc = 'Increase window height',
+      },
     }
     vim.g.remotions_motions = motions
     -- Make the ',' and ';' acting in the direction of the document:
@@ -92,6 +165,9 @@ For each motion three information have to be provided and some options can be se
 
 - The `backward` motion key sequence (e.g. `{`)
 - The `forward` motion key sequence (e.g. `}`)
+
+- The `backward_desc` motion description
+- The `forward_desc` motion description
 
 - The `repeat_if_count` option for the motion.
   If set the motion is repeatable only if it has been executed with a count above of 1.

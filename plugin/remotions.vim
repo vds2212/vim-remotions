@@ -289,13 +289,14 @@ function! s:CustomMotion(forward, backward_plug, forward_plug, motion_plug, moti
 endfunction
 
 function! s:HijackMotion(modes, motion, motion_family)
-  " Replace the original motion mapping by a plugged version
+  " Create a plugged version of the original motion mapping
   " - A plug motion is created with the original content
   " - The original mapping is deleted
   " - The plug motion is returned
   " Rational: The original motion mapping need to be redirected to an action
   " that store the context
 
+  let desc = ""
   let mode_count = 0
   for mode in split(a:modes, '\zs')
     let mode_count = mode_count + 1
@@ -303,6 +304,10 @@ function! s:HijackMotion(modes, motion, motion_family)
     let motion_mapping = maparg(a:motion, mode, 0, 1)
     let motion_key = '<Plug>(' . a:motion_family . ')'
     let motion_plug = "\<Plug>(" . a:motion_family . ')'
+    if has_key(motion_mapping, "desc")
+      let desc = motion_mapping.desc
+      " echom 'motion:' . a:motion . ", desc: '" . desc . "'"
+    endif
 
     if len(motion_mapping) == 0
       " There is no mapping for that motion
@@ -363,28 +368,45 @@ function! s:HijackMotion(modes, motion, motion_family)
     endif
   endfor
 
-  return motion_plug
+  let ret = [motion_plug, desc]
+  " echom "Motion: " . a:motion . ", desc: '" . desc . "'"
+  return ret
 endfunction
 
-function! s:HijackMotions(modes, backward, forward, motion, motion_plug, motion_family)
+function! s:HijackMotions(modes, backward, forward, motion, motion_plug, motion_family, backward_desc, forward_desc)
   " Introduce a plugged version of the backward and forward motions
   " Replace the backward and forward motion by
   " a backward and forward motion that use the CustomMotion method
   " that use the plugged version of the motion to execute the original motion
 
   if a:motion == ''
-    let backward_plug = s:HijackMotion(a:modes, a:backward, "backward" . a:motion_family)
-    let forward_plug = s:HijackMotion(a:modes, a:forward, "forward" . a:motion_family)
+    let backward_ret = s:HijackMotion(a:modes, a:backward, "backward" . a:motion_family)
+    let backward_plug = backward_ret[0]
+    let backward_desc = backward_ret[1]
+
+    let forward_ret = s:HijackMotion(a:modes, a:forward, "forward" . a:motion_family)
+    let forward_plug = forward_ret[0]
+    let forward_desc = forward_ret[1]
 
     let motion_plug = ''
+    let motion_desc = ''
   else
     let backward_plug = a:backward
     let forward_plug = a:forward
 
     let motion_plug = a:motion_plug
     if motion_plug == ''
-      let motion_plug = s:HijackMotion(a:modes, a:motion, "motion" . a:motion_family)
+      let motion_ret = s:HijackMotion(a:modes, a:motion, "motion" . a:motion_family)
+      let motion_plug = motion_ret[0]
+      let motion_desc = motion_ret[1]
     endif
+  endif
+
+  if a:backward_desc != ''
+    let backward_desc = a:backward_desc
+  endif
+  if a:forward_desc != ''
+    let forward_desc = a:forward_desc
   endif
 
   for mode in split(a:modes, '\zs')
@@ -394,21 +416,66 @@ function! s:HijackMotions(modes, backward, forward, motion, motion_plug, motion_
       let mapping.mode = mode
       let mapping.buffer = 1
       call add(b:added_mappings, mapping)
-      execute mode . 'map <buffer> <silent> <expr> ' . a:backward . " <SID>CustomMotion(0, '" . backward_plug . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
+      if has('nvim')
+        let new_mapping = {
+              \ "mode": mode,
+              \ "lhs" : a:backward,
+              \ "rhs" : "<SID>CustomMotion(0, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')",
+              \ "desc" : backward_desc,
+              \ "lhsraw" : a:backward,
+              \ "norempa" : 0,
+              \ "buffer" : 1,
+              \ "silent" : 1,
+              \ "expr" : 1,
+              \ }
+        call mapset(mode, 0, new_mapping)
+      else
+        execute mode . 'map <buffer> <silent> <expr> ' . a:backward . " <SID>CustomMotion(0, '" . backward_plug . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
+      endif
 
       let mapping = {}
       let mapping.lhs = a:forward
       let mapping.mode = mode
       let mapping.buffer = 1
       call add(b:added_mappings, mapping)
-      execute mode . 'map <buffer> <silent> <expr> ' . a:forward . " <SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
+      if has('nvim')
+        let new_mapping = {
+              \ "mode": mode,
+              \ "lhs" : a:forward,
+              \ "rhs" : "<SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')",
+              \ "desc" : forward_desc,
+              \ "lhsraw" : a:forward,
+              \ "norempa" : 0,
+              \ "buffer" : 1,
+              \ "silent" : 1,
+              \ "expr" : 1,
+              \ }
+        call mapset(mode, 0, new_mapping)
+      else
+        execute mode . 'map <buffer> <silent> <expr> ' . a:forward . " <SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
+      endif
     else
       let mapping = {}
       let mapping.lhs = a:motion
       let mapping.mode = mode
       let mapping.buffer = 1
       call add(b:added_mappings, mapping)
-      execute mode . 'map <buffer> <silent> <expr> ' . a:motion . " <SID>CustomMotion(2, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
+      if has('nvim')
+        let new_mapping = {
+              \ "mode": mode,
+              \ "lhs" : a:motion,
+              \ "rhs" : "<SID>CustomMotion(2, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')",
+              \ "desc" : motion_desc,
+              \ "lhsraw" : a:motion,
+              \ "norempa" : 0,
+              \ "buffer" : 1,
+              \ "silent" : 1,
+              \ "expr" : 1,
+              \ }
+        call mapset(mode, 0, new_mapping)
+      else
+        execute mode . 'map <buffer> <silent> <expr> ' . a:motion . " <SID>CustomMotion(2, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
+      endif
     endif
   endfor
 endfunction
@@ -429,7 +496,12 @@ function! RemotionsResetMappings()
         endif
         let cmd = cmd . mapping.lhs
         call s:Log('  ' . cmd)
-        execute cmd
+        try
+          execute cmd
+        catch /^Vim\%((\S\+)\)\=:E31:/
+          " echom cmd
+          " echom "Missing mapping: " . mapping.lhs
+        endtry
       endfor
     endfor
   endif
@@ -457,14 +529,27 @@ function! s:SetMappings()
       continue
     endif
     let motion = ''
-    if has_key(g:remotions_motions[motion_family], 'motion')
-      let motion = g:remotions_motions[motion_family].motion
+    let motions = g:remotions_motions[motion_family]
+
+    if has_key(motions, 'motion')
+      let motion = motions.motion
     endif
     let motion_plug = ''
-    if has_key(g:remotions_motions[motion_family], 'motion_plug')
-      let motion_plug = g:remotions_motions[motion_family].motion_plug
+    if has_key(motions, 'motion_plug')
+      let motion_plug = motions.motion_plug
     endif
-    call s:HijackMotions('nv', g:remotions_motions[motion_family].backward, g:remotions_motions[motion_family].forward, motion, motion_plug, motion_family)
+
+    let backward_desc = ""
+    if has_key(motions, 'backward_desc')
+      let backward_desc = motions.backward_desc
+    endif
+
+    let forward_desc = ""
+    if has_key(motions, 'forward_desc')
+      let forward_desc = motions.forward_desc
+    endif
+
+    call s:HijackMotions('nv', motions.backward, motions.forward, motion, motion_plug, motion_family, backward_desc, forward_desc)
   endfor
 
   call s:Log("SetMappings() ->")
