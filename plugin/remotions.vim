@@ -306,6 +306,7 @@ function! s:HijackMotion(modes, motion, motion_family)
     let b:deleted_mappings = []
   endif
 
+  let desc = ""
   let mode_count = 0
   for mode in split(a:modes, '\zs')
     let mode_count = mode_count + 1
@@ -313,10 +314,12 @@ function! s:HijackMotion(modes, motion, motion_family)
     let motion_mapping = maparg(a:motion, mode, 0, 1)
     let motion_key = '<Plug>(' . a:motion_family . ')'
     let motion_plug = "\<Plug>(" . a:motion_family . ')'
-    let desc = ""
-    if has_key(motion_mapping, "desc")
-      let desc = motion_mapping.desc
-      " echom 'motion:' . a:motion . ", desc: '" . desc . "'"
+    if desc == ''
+      if has_key(motion_mapping, "desc")
+        let desc = motion_mapping.desc
+      elseif has_key(motion_mapping, "rhs")
+        let desc = motion_mapping.rhs
+      endif
     endif
 
     if len(motion_mapping) == 0
@@ -431,13 +434,15 @@ function! s:HijackMotions(modes, backward, forward, motion, motion_plug, motion_
               \ "mode": mode,
               \ "lhs" : a:backward,
               \ "rhs" : "<SID>CustomMotion(0, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')",
-              \ "desc" : backward_desc,
               \ "lhsraw" : a:backward,
               \ "norempa" : 0,
               \ "buffer" : 1,
               \ "silent" : 1,
               \ "expr" : 1,
               \ }
+        if backward_desc != ''
+          let new_mapping.desc = backward_desc
+        endif
         call mapset(mode, 0, new_mapping)
       else
         execute mode . 'map <buffer> <silent> <expr> ' . a:backward . " <SID>CustomMotion(0, '" . backward_plug . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
@@ -453,13 +458,15 @@ function! s:HijackMotions(modes, backward, forward, motion, motion_plug, motion_
               \ "mode": mode,
               \ "lhs" : a:forward,
               \ "rhs" : "<SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')",
-              \ "desc" : forward_desc,
               \ "lhsraw" : a:forward,
               \ "norempa" : 0,
               \ "buffer" : 1,
               \ "silent" : 1,
               \ "expr" : 1,
               \ }
+        if forward_desc != ''
+          let new_mapping.desc = forward_desc
+        endif
         call mapset(mode, 0, new_mapping)
       else
         execute mode . 'map <buffer> <silent> <expr> ' . a:forward . " <SID>CustomMotion(1, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
@@ -475,13 +482,15 @@ function! s:HijackMotions(modes, backward, forward, motion, motion_plug, motion_
               \ "mode": mode,
               \ "lhs" : a:motion,
               \ "rhs" : "<SID>CustomMotion(2, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')",
-              \ "desc" : motion_desc,
               \ "lhsraw" : a:motion,
               \ "norempa" : 0,
               \ "buffer" : 1,
               \ "silent" : 1,
               \ "expr" : 1,
               \ }
+        if motion_desc != ''
+          let new_mapping.desc = motion_desc
+        endif
         call mapset(mode, 0, new_mapping)
       else
         execute mode . 'map <buffer> <silent> <expr> ' . a:motion . " <SID>CustomMotion(2, '" . backward_plug  . "', '" . forward_plug . "', '" . motion_plug . "', '" . a:motion_family . "')"
