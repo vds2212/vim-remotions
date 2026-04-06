@@ -9,21 +9,47 @@ endif
 if !exists("g:remotions_motions")
   let g:remotions_motions = {
         \ 'TtFf' : {},
-        \ 'para' : { 'backward' : '{', 'forward' : '}' },
-        \ 'sentence' : { 'backward' : '(', 'forward' : ')' },
-        \ 'change' : { 'backward' : 'g,', 'forward' : 'g;' },
-        \ 'class' : { 'backward' : '[[', 'forward' : ']]' },
-        \ 'classend' : { 'backward' : '[]', 'forward' : '][' },
-        \ 'method' : { 'backward' : '[m', 'forward' : ']m' },
-        \ 'methodend' : { 'backward' : '[M', 'forward' : ']M' },
+        \ 'para' : { 'backward' : '{', 'forward' : '}',
+        \   'backward_desc' : 'Previous paragraph', 'forward_desc' : 'Next paragraph'
+        \ },
+        \ 'sentence' : { 'backward' : '(', 'forward' : ')',
+        \   'backward_desc' : 'Previous sentence', 'forward_desc' : 'Next sentence'
+        \ },
+        \ 'change' : { 'backward' : 'g,', 'forward' : 'g;',
+        \   'backward_desc' : 'Previous change', 'forward_desc' : 'Next change'
+        \ },
+        \ 'class' : { 'backward' : '[[', 'forward' : ']]',
+        \   'backward_desc' : 'Previous class', 'forward_desc' : 'Next class'
+        \ },
+        \ 'classend' : { 'backward' : '[]', 'forward' : '][',
+        \   'backward_desc' : 'Previous class end', 'forward_desc' : 'Next class end'
+        \ },
+        \ 'method' : { 'backward' : '[m', 'forward' : ']m',
+        \   'backward_desc' : 'Previous method', 'forward_desc' : 'Next method'
+        \ },
+        \ 'methodend' : { 'backward' : '[M', 'forward' : ']M',
+        \   'backward_desc' : 'Previous method end', 'forward_desc' : 'Next method end'
+        \ },
         \
-        \ 'arg' : { 'backward' : '[a', 'forward' : ']a', 'doc': 'unimpaired' },
-        \ 'buffer' : { 'backward' : '[b', 'forward' : ']b', 'doc': 'unimpaired' },
-        \ 'location' : { 'backward' : '[l', 'forward' : ']l', 'doc': 'unimpaired' },
-        \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q', 'doc': 'unimpaired' },
-        \ 'tag' : { 'backward' : '[t', 'forward' : ']t', 'doc': 'unimpaired' },
+        \ 'arg' : { 'backward' : '[a', 'forward' : ']a',
+        \   'backward_desc' : 'Previous argument', 'forward_desc' : 'Next argument'
+        \ },
+        \ 'buffer' : { 'backward' : '[b', 'forward' : ']b',
+        \   'backward_desc' : 'Previous buffer', 'forward_desc' : 'Next buffer'
+        \ },
+        \ 'location' : { 'backward' : '[l', 'forward' : ']l',
+        \   'backward_desc' : 'Previous location', 'forward_desc' : 'Next location'
+        \ },
+        \ 'quickfix' : { 'backward' : '[q', 'forward' : ']q',
+        \   'backward_desc' : 'Previous fix', 'forward_desc' : 'Next fix'
+        \ },
+        \ 'tag' : { 'backward' : '[t', 'forward' : ']t',
+        \   'backward_desc' : 'Previous tag', 'forward_desc' : 'Next tag'
+        \ },
         \
-        \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g', 'doc': 'coc-diagnostic' },
+        \ 'diagnostic' : { 'backward' : '[g', 'forward' : ']g',
+        \   'backward_desc' : 'Previous diagnostic', 'forward_desc' : 'Next diagnostic'
+        \ },
         \ }
 
 " let g:remotions_motions = {
