@@ -472,9 +472,9 @@ or its new [version](https://github.com/Houl/repmo-vim)
 is mature plugin used by a number of people.
 
 In my experience repmo works well for builtin commands.
-But when the builtin command are overridden for a specific `filetype` (e.g. `]m` for the `python` `filetype`).
+But when the builtin command are overridden for a specific `filetype` (e.g. `]m` for the `python` `filetype`)
 or when it is overridden by a `filetype` plugin (e.g. `]m` with [pythonsense](https://github.com/jeetsukumaran/vim-pythonsense))
-I had difficulty to make it working (I failed).
+I had difficulty to make it working (i.e. I failed to make it working).
 
 I'm wondering also how repmo handle commands that are overridden by two different plugins for two different `filetype`.
 
@@ -495,16 +495,16 @@ It introduces four keys to repeat the motions:
 In my experience repeatable-motions works well for builtin commands.
 It supports a number of builtin motions.
 
-But when the builtin command are overridden for a specific `filetype` (e.g. `]m` for the `python` `filetype`).
+But when the builtin command are overridden for a specific `filetype` (e.g. `]m` for the `python` `filetype`)
 or when it is overridden by a `filetype` plugin (e.g. `]m` with [pythonsense](https://github.com/jeetsukumaran/vim-pythonsense))
-I had difficulty to make it working (I failed).
+I had difficulty to make it working (i.e. I failed to make it working).
 
-If one of the previous statements about repeatable-motions is imprecise or wrong I'll more than happy to rectify the text.
+If one of the previous statements about repeatable-motions is imprecise or wrong I'll be more than happy to rectify the text.
 Raise an issue and I will adapt the text of this readme file.
 
 
 ### Repeat Motion
 
 According to the documentation [repeat-motion](https://www.vim.org/scripts/script.php?script_id=3665)
-only repeat a set of predefined builtin motions (i.e. `k`, `j`, `h`, `l`, `w`, `b`, `W`, `B`, `e`, `E`, `ge`, `gE`)
+only repeats a set of predefined builtin motions (i.e. `k`, `j`, `h`, `l`, `w`, `b`, `W`, `B`, `e`, `E`, `ge`, `gE`)
 
